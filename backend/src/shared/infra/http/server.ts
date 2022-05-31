@@ -5,7 +5,8 @@ import { routes } from "./routes";
 import "@shared/container";
 import { AppError } from "@shared/errors/AppError";
 const app = express();
-
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 app.use(routes);
 
