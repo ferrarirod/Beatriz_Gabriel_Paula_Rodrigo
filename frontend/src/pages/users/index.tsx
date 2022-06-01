@@ -7,7 +7,7 @@ import {
 import { Button, Form, Row, Space, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
 import { SelectForm } from "../../components/Select";
@@ -30,39 +30,8 @@ interface FormUser {
   confirmPassword: string;
 }
 
-const dataSource: DataUsers[] = [
-  {
-    id: "",
-    name: "Gabriel",
-    email: "gabriel@gmail.com",
-    cpf: "123456789",
-    type: 0,
-  },
-  {
-    id: "",
-    name: "Beatriz",
-    email: "beatriz@gmail.com",
-    cpf: "123456789",
-    type: 0,
-  },
-  {
-    id: "",
-    name: "Rodrigo",
-    email: "rodrigo@gmail.com",
-    cpf: "123456789",
-    type: 0,
-  },
-  {
-    id: "",
-    name: "Paula",
-    email: "paula@gmail.com",
-    cpf: "123456789",
-    type: 0,
-  },
-];
-
 export function ListUsersPage() {
-  const { register, reset, getValues, control, handleSubmit } = useForm({
+  const { reset, control, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -78,7 +47,7 @@ export function ListUsersPage() {
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [users, setUsers] = useState<DataUsers[]>([]);
 
-  useEffect(() => {
+  const handleUsers = useCallback(() => {
     api
       .get("/users")
       .then((response) => {
@@ -89,25 +58,37 @@ export function ListUsersPage() {
       });
   }, []);
 
+  useEffect(() => {
+    handleUsers();
+  }, [handleUsers]);
+
   const handleCreateUser: SubmitHandler<FormUser> = useCallback(
     async (formValue) => {
-      console.log(formValue);
-        api
-          .post("/users", {
-            name: formValue.name,
-            email: formValue.email,
-            type: formValue.type,
-            password: formValue.password,
-            cpf: formValue.cpf,
-          })
-          .then((response) => {
-            console.log("created");
-          })
-          .catch((err) => {
-            console.log(err);
+      api
+        .post("/users", {
+          name: formValue.name,
+          email: formValue.email,
+          type: formValue.type,
+          password: formValue.password,
+          cpf: formValue.cpf,
+        })
+        .then((response) => {
+          handleUsers();
+          setVisibleCreate(false);
+          reset({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            cpf: "",
+            type: 1,
           });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    []
+    [handleUsers, reset]
   );
 
   const columns: ColumnsType<DataUsers> = [

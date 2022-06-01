@@ -9,8 +9,7 @@ class UsersController {
 
     const createUserService = container.resolve(CreateUserService);
 
-    console.log({ email, cpf, name, password, type } )
-    const user = await createUserService.execute({
+    await createUserService.execute({
       email,
       cpf,
       name,
@@ -18,8 +17,7 @@ class UsersController {
       type,
     });
 
-    return response.json(user);
-
+    return response.status(204).json({});
   }
   public async index(request: Request, response: Response): Promise<Response> {
     const listUsersService = container.resolve(ListUsersService);
