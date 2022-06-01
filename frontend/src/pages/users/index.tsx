@@ -6,11 +6,12 @@ import {
 } from "@ant-design/icons";
 import { Button, Form, Row, Space, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
 import { SelectForm } from "../../components/Select";
+import { api } from "../../services/api";
 
 interface DataUsers {
   id: string;
@@ -18,6 +19,15 @@ interface DataUsers {
   email: string;
   cpf: string;
   type: number;
+}
+
+interface FormUser {
+  name: string;
+  email: string;
+  cpf: string;
+  type: number;
+  password: string;
+  confirmPassword: string;
 }
 
 const dataSource: DataUsers[] = [
@@ -52,7 +62,8 @@ const dataSource: DataUsers[] = [
 ];
 
 export function ListUsersPage() {
-  const { register, reset, getValues, control } = useForm({
+  const { register, reset, getValues, control, handleSubmit } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -65,6 +76,40 @@ export function ListUsersPage() {
 
   const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  const [users, setUsers] = useState<DataUsers[]>([]);
+
+  useEffect(() => {
+    api
+      .get("/users")
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleCreateUser: SubmitHandler<FormUser> = useCallback(
+    async (formValue) => {
+      console.log(formValue);
+        api
+          .post("/users", {
+            name: formValue.name,
+            email: formValue.email,
+            type: formValue.type,
+            password: formValue.password,
+            cpf: formValue.cpf,
+          })
+          .then((response) => {
+            console.log("created");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    },
+    []
+  );
+
   const columns: ColumnsType<DataUsers> = [
     {
       title: "Name",
@@ -118,22 +163,17 @@ export function ListUsersPage() {
           <PlusCircleOutlined /> Adicionar
         </Button>
       </Row>
-      <Table dataSource={dataSource} columns={columns}></Table>
+      <Table dataSource={users} columns={columns}></Table>
       <FormDrawer
         title="Cadastrando Usuário"
-        onClose={() => setVisibleCreate(false)}
-        visible={visibleCreate}>
-        <InputForm
-          label="Nome"
-          {...register("name")}
-          value={getValues("name")}
-        />
-        <InputForm
-          label="E-mail"
-          {...register("email")}
-          value={getValues("email")}
-        />
-        <InputForm label="CPF" {...register("cpf")} value={getValues("cpf")} />
+        onClose={() => {
+          setVisibleCreate(false);
+        }}
+        visible={visibleCreate}
+        onSubmit={handleSubmit(handleCreateUser)}>
+        <InputForm label="Nome" control={control} name="name" />
+        <InputForm label="E-mail" control={control} name="email" />
+        <InputForm label="CPF" control={control} name="cpf" />
         <SelectForm
           control={control}
           name="type"
@@ -149,35 +189,42 @@ export function ListUsersPage() {
             },
           ]}
         />
-        <InputForm
-          label="Senha"
-          {...register("password")}
-          value={getValues("password")}
-        />
+        <InputForm label="Senha" control={control} name="password" />
         <InputForm
           label="Confirmar Senha"
-          {...register("confirmPassword")}
-          value={getValues("confirmPassword")}
+          control={control}
+          name="confirmPassword"
         />
         <Form.Item>
-          <Button type="primary">Cadastrar</Button>
+          <Space>
+            <Button htmlType="submit" type="primary">
+              Cadastrar
+            </Button>
+            <Button
+              onClick={() => {
+                reset({
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirmPassword: "",
+                  cpf: "",
+                  type: 1,
+                });
+              }}>
+              Limpar
+            </Button>
+          </Space>
         </Form.Item>
       </FormDrawer>
       <FormDrawer
         title="Editando Usuário"
-        onClose={() => setVisibleEdit(false)}
+        onClose={() => {
+          setVisibleEdit(false);
+        }}
         visible={visibleEdit}>
-        <InputForm
-          label="Nome"
-          {...register("name")}
-          value={getValues("name")}
-        />
-        <InputForm
-          label="E-mail"
-          {...register("email")}
-          value={getValues("email")}
-        />
-        <InputForm label="CPF" {...register("cpf")} value={getValues("cpf")} />
+        <InputForm label="Nome" control={control} name="name" />
+        <InputForm label="E-mail" control={control} name="email" />
+        <InputForm label="CPF" control={control} name="cpf" />
         <SelectForm
           control={control}
           name="type"
@@ -193,15 +240,11 @@ export function ListUsersPage() {
             },
           ]}
         />
-        <InputForm
-          label="Senha"
-          {...register("password")}
-          value={getValues("password")}
-        />
+        <InputForm label="Senha" control={control} name="password" />
         <InputForm
           label="Confirmar Senha"
-          {...register("confirmPassword")}
-          value={getValues("confirmPassword")}
+          control={control}
+          name="confirmPassword"
         />
         <Form.Item>
           <Button type="primary">Salvar</Button>

@@ -10,6 +10,12 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = connection<User>("users");
   }
 
+  public async findAll(): Promise<User[]> {
+    const users = await this.ormRepository.where({});
+
+    return users;
+  }
+
   public async findByEmailOrCpf({
     email,
     cpf,
