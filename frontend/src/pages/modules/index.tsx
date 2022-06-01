@@ -14,7 +14,6 @@ const tailLayout = {
 };
 
 export function ListModulesPage() {
-    console.log("??")
     const [modules, setModules] = useState<Module[]>();
     const [editing, setEditing] = useState(false);
     const [showing, setShowing] = useState(false);
@@ -106,14 +105,14 @@ export function ListModulesPage() {
                 >
                     <Form.Item
                         label="Título"
-                        name="title"
+                        name="name"
                         rules={[{ required: true, message: 'O título do módulo é obrigatório' }]}
                     >
                         <Input defaultValue={selectedModule?.name} />
                     </Form.Item>
                     <Form.Item
-                        label="Link"
-                        name="link"
+                        label="Descrição"
+                        name="description"
                     >
                         <Input defaultValue={selectedModule?.description} />
                     </Form.Item>
