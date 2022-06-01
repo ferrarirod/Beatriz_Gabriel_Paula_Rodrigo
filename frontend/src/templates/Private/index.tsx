@@ -8,6 +8,8 @@ interface PrivateProps {
 }
 
 export function Private({ children }: PrivateProps) {
+
+  
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <SideBar />

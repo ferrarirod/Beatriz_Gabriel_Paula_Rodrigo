@@ -7,6 +7,8 @@ export function AppRoutes() {
     <Private>
       <Routes>
         <Route path="/" element={<ListUsersPage />} />
+        <Route path="/users" element={<h1>Users</h1>}/>
+        <Route path="/users/create" element={<h1>Users / Create</h1>} />
       </Routes>
     </Private>
   );
