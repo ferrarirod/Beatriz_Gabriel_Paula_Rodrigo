@@ -11,7 +11,7 @@ import { connection } from "@shared/infra/knex";
 class ClassesRepository implements IClassesRepository {
   private ormRepository;
   constructor() {
-    this.ormRepository = connection<Class>("Classes");
+    this.ormRepository = connection<Class>("classes");
   }
 
   public async create({
@@ -33,11 +33,12 @@ class ClassesRepository implements IClassesRepository {
     content,
     link
   }: IUpdateClassDTO): Promise<Class> {
-    const aClass = new Class({ title, module, content, link });
+    console.log('calling update from repository,  id received: ', id);
+    const updatedClass = new Class({ title, module, content, link });
+    updatedClass.id = id;
+    await this.ormRepository.where('id', '=' , id).update({ title, module, content, link });
 
-    await this.ormRepository.where('id', '=' , id).update(aClass);
-
-    return aClass;
+    return updatedClass;
   }
   public async show({
     id
@@ -53,8 +54,12 @@ class ClassesRepository implements IClassesRepository {
     await this.ormRepository.where('id', '=' , id).del();
     return deletedClass;
   }
+  
   public async index(): Promise<Class[]>{
+    console.log('this.repository', this.ormRepository)
     const classes = await this.ormRepository.select();
+    const sql = await this.ormRepository.select().toSQL().toNative()
+    console.log("ccalling index inside repository- SQL: ", sql)
     return classes;
   }
 }

@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("module").notNullable();
     table.text("content").notNullable();
     table.string("link").notNullable();
+    table.integer('score').notNullable();
     table.dateTime("created_at").notNullable();
     table.dateTime("updated_at").notNullable();
   });

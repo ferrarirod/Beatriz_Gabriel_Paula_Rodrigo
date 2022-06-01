@@ -25,6 +25,7 @@ class ClassesController {
     return response.json(newClass);
   }
   public async index(request: Request, response: Response): Promise<Response> {
+    console.log('calling index from controller')
     const indexClassService = container.resolve(IndexClassService);
     const classes = await indexClassService.execute();
     return response.json(classes);
@@ -38,6 +39,7 @@ class ClassesController {
   public async update(request: Request, response: Response): Promise<Response> {
     const { title, module, content, link } = request.body;
     const id = request.params.id;
+    console.log('calling update from controller, id received = ', id )
     const updateClassService = container.resolve(UpdateClassService);
     const updatedClass = await updateClassService.execute({
       id,
