@@ -17,7 +17,6 @@ class CreateModuleService {
   }: ICreateModuleDTO): Promise<Module> {
 
     const Module = await this.ModulesRepository.create({
-      id,
       name,
       description
     });

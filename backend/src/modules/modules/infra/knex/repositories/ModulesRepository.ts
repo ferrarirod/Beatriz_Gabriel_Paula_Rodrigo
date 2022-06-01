@@ -15,11 +15,10 @@ class ModuleRepository implements IModulesRepository {
 
 
   public async create({
-    id,
     name,
     description,
   }: ICreateModuleDTO): Promise<Module> {
-    const module = new Module({ id, name, description });
+    const module = new Module({ name, description });
 
     await this.ormRepository.insert(module);
 
@@ -31,7 +30,7 @@ class ModuleRepository implements IModulesRepository {
     name,
     description
   }: IUpdateModuleDTO): Promise<Module> {
-    const aModule = new Module({ id, name, description });
+    const aModule = new Module({ name, description });
 
     await this.ormRepository.where('id', '=', id).update(aModule);
 

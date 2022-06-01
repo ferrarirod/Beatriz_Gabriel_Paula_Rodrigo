@@ -14,6 +14,7 @@ const tailLayout = {
 };
 
 export function ListModulesPage() {
+    console.log("??")
     const [modules, setModules] = useState<Module[]>();
     const [editing, setEditing] = useState(false);
     const [showing, setShowing] = useState(false);
@@ -55,23 +56,20 @@ export function ListModulesPage() {
 
 
     }
-    const handleUrl = (url: string) => {
-        url.replace("watch?v=", "embed/");
-    }
     const onFinish = () => {
 
     }
     const columns: ColumnsType<Module> = [
         {
             title: 'Título',
-            dataIndex: 'title',
-            key: 'title',
+            dataIndex: 'name',
+            key: 'name',
             render: (text, record) => <a onClick={() => editModule(record)}>{text}</a>,
         },
         {
-            title: 'Módulo',
-            dataIndex: 'module',
-            key: 'module',
+            title: 'Descrição',
+            dataIndex: 'description',
+            key: 'description',
         },
         {
             title: 'Action',
