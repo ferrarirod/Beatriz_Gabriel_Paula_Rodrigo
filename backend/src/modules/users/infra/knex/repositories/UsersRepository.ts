@@ -5,6 +5,7 @@ import { User } from "../entities/User";
 import { connection } from "@shared/infra/knex";
 
 class UsersRepository implements IUsersRepository {
+
   public async findAll(): Promise<User[]> {
     const users = await connection<User>("users").select();
 

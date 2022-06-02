@@ -1,7 +1,6 @@
 import { Menu } from "antd";
 import { ReactNode } from "react";
-
-const { Item } = Menu;
+import { Link } from "react-router-dom";
 
 interface MenuLinkProps {
   to: string;
@@ -11,9 +10,12 @@ interface MenuLinkProps {
 }
 
 export function MenuLink({ to, key, text, icon }: MenuLinkProps) {
+  
   return (
-    <Item key={key} icon={icon}>
-      {text}
-    </Item>
+    <Link to={to}>
+      <Menu.Item key={key} icon={icon} >
+        {text}
+      </Menu.Item>
+    </Link>
   );
 }

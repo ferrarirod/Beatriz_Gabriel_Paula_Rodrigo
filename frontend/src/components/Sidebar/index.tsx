@@ -1,12 +1,32 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
-import { MenuLink } from "../MenuLink";
-import {
-  DashboardFilled,
-  UserOutlined,
-} from "@ant-design/icons";
+import { DashboardFilled, UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: "group"
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
+
+const items: MenuItem[] = [
+  getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
+  getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
+];
 
 export function SideBar() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -20,10 +40,7 @@ export function SideBar() {
         className="logo"
         style={{ height: "40px", backgroundColor: "#c7c7c7", margin: "16px" }}
       />
-      <Menu theme="dark"  mode="inline">
-        <MenuLink to="/" key="1" text="Painel" icon={<DashboardFilled />} />
-        <MenuLink to="/users" key="2" text="Usuários" icon={<UserOutlined />} />
-      </Menu>
+      <Menu theme="dark" mode="inline" items={items} />
     </Sider>
   );
 }

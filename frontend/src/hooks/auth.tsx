@@ -76,7 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const { user, token } = response.data;
           localStorage.setItem("@WebMasters:user", user);
           localStorage.setItem("@WebMasters:token", token);
-          // api.defaults.headers.authorization =`Bearer ${token}`;
+          api.defaults.headers.common["authorization"] = `Bearer ${token}`;
           updateContext(user);
         })
         .catch((err) => {
