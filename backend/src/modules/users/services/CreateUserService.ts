@@ -20,19 +20,19 @@ class CreateUserService {
     name,
     password,
     type,
-  }: ICreateUserDTO): Promise<User> {
+  }: ICreateUserDTO): Promise<void> {
     const userAlreadyExist = await this.usersRepository.findByEmailOrCpf({
       cpf,
       email,
     });
-
+    
     if (userAlreadyExist) {
-      throw new Error("User already exist.");
+      throw new AppError("User already exist.", 400);
     }
 
     const hashPassword = await this.hashProvider.generateHash(password);
 
-    const user = await this.usersRepository.create({
+    await this.usersRepository.create({
       cpf,
       email,
       name,
@@ -40,7 +40,6 @@ class CreateUserService {
       type,
     });
 
-    return user;
   }
 }
 

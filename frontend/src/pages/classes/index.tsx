@@ -16,14 +16,9 @@ import type { ColumnsType } from 'antd/lib/table';
 import './styles.css';
 import { api } from '../../services/api';
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
+
 interface FormClass {
+    id: string;
     title: string;
     module: string;
     content: string;
@@ -38,26 +33,27 @@ interface ModuleOption{
 }
 
 export function ListClassesPage(){
-    const { register, reset, getValues, control, handleSubmit } = useForm({
-        mode: "onChange",
-        defaultValues: {
-          title: "",
-          module: "",
-          content: "",
-          link: "",
-          score: "",
-        },
-      });
-      
+
     const [classes, setClasses] = useState<Class[]>();
     const [modules, setModules] = useState<Module[]>();
     const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
     const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
     const [visibleShow, setVisibleShow] = useState<boolean>(false);
     const [moduleOptions, setModuleOptions ]= useState<ModuleOption[]>();
-
-
     const [selectedClass, setSelectedClass ]= useState<Class>();
+
+    const { reset, getValues, control, handleSubmit } = useForm({
+        mode: "onChange",
+        defaultValues: {
+        id:"",
+          title: "",
+          module: "",
+          content: "",
+          link: "",
+          score: 0,
+        },
+      });
+      
 
     async function getClasses () {
         try {
@@ -108,11 +104,12 @@ export function ListClassesPage(){
               getClasses();
               setVisibleCreate(false);
               reset({
+                id:"",
                 title: "",
                 module: "",
                 content: "",
                 link: "",
-                score: "",
+                score: 0,
               });
             })
             .catch((err) => {
@@ -124,7 +121,9 @@ export function ListClassesPage(){
 
     const handleUpdateClass: SubmitHandler<FormClass> = useCallback(
         async (formValue) => {
-            api.put("/classes", {
+            console.log(formValue);
+
+            api.put(`classes/${formValue.id}`, {
                 title: formValue.title,
                 module: formValue.module,
                 content: formValue.content,
@@ -133,13 +132,14 @@ export function ListClassesPage(){
             })
             .then((response) => {
               getClasses();
-              setVisibleCreate(false);
+              setVisibleEdit(false);
               reset({
+                  id:"",
                 title: "",
                 module: "",
                 content: "",
                 link: "",
-                score: "",
+                score: 0,
               });
             })
             .catch((err) => {
@@ -150,16 +150,6 @@ export function ListClassesPage(){
         
     );
 
-    async function updateClass(data:string){
-        try {
-            console.log('values to update', data)
-            await api.put(`classes/${selectedClass?.id}`, data);
-            getClasses();
-        
-        }catch(err){
-        console.log('erro',JSON.stringify(err));
-        }; 
-    }
 
     async function deleteClass(data:Class){
         setSelectedClass(data);
@@ -231,6 +221,7 @@ export function ListClassesPage(){
               type="primary"
               onClick={() => {
                 reset({
+                   id: _.id,
                    title: _.title,
                    module: _.module.name,
                    content: _.content,
@@ -283,14 +274,26 @@ export function ListClassesPage(){
             </Drawer>
             <FormDrawer
                 title="Cadastrando Aula"
-                onClose={() => setVisibleCreate(false)}
+                onClose={() =>{
+                    reset({
+                        id:"",
+                        title: "",
+                        module: "",
+                        content: "",
+                        link: "",
+                        score: 0,
+                      });
+                      setVisibleCreate(false)
+                } 
+                }
                 visible={visibleCreate}
+                onSubmit={handleSubmit(handleCreateClass)}
                 >
 
                 <InputForm
+                name="title"
                 control={control}
                 label="Título"
-                {...register("title")}
                 />
                <SelectForm
                 control={control}
@@ -299,29 +302,61 @@ export function ListClassesPage(){
                 options={moduleOptions ||  [{label: "Não há módulos", value: 0}]}
                 />
                 <InputForm
+                name="content"
                 control={control}
-                 label="Conteúdo" {...register("content")} 
+                 label="Conteúdo"
+                 />
+                <InputForm 
+                control={control}
+                name="link"
+                label="Link para vídeo da aula"
                  />
                 <InputForm
+                name="score"
                 control={control}
                 label="Score"
-                {...register("score")}
                 />
                 <Form.Item>
                 <Button htmlType="submit" type="primary">
                     Cadastrar
                 </Button>
+                <Button
+                    onClick={() => {
+                        reset({
+                            id:"",
+                            title: "",
+                            module: "",
+                            content: "",
+                            link: "",
+                            score: 0,
+                        });
+                    }}>
+                    Limpar
+                    </Button>
                 </Form.Item>
             </FormDrawer>
             <FormDrawer
                 title="Editando Aula"
-                onClose={() => setVisibleEdit(false)}
+                onClose={() =>{
+                    reset({
+                        title: "",
+                        module: "",
+                        content: "",
+                        link: "",
+                        score: 0,
+                      });
+                      setVisibleEdit(false)
+                }}
                 visible={visibleEdit}
+                onSubmit={handleSubmit(handleUpdateClass)}
                 >
+                <InputForm hidden label=""                 
+                value={getValues("id")}
+                control={control} name="id" />
                 <InputForm
+                name="title"
                 control={control}
                 label="Título"
-                {...register("title")}
                 value={getValues("title")}
                 />
                 <SelectForm
@@ -332,11 +367,16 @@ export function ListClassesPage(){
                 />
                 <InputForm 
                 control={control}
-                label="Conteúdo" {...register("content")} value={getValues("content")} />
+                name="content"
+                label="Conteúdo" value={getValues("content")} />
+                <InputForm 
+                control={control}
+                name="link"
+                label="Link para vídeo da aula" value={getValues("link")} />
                 <InputForm
+                name="score"
                 control={control}
                 label="Score"
-                {...register("score")}
                 value={getValues("score")}
                 />
                 <Form.Item>

@@ -1,14 +1,15 @@
 import { CreateUserService } from "@modules/users/services/CreateUserService";
+import { ListUsersService } from "@modules/users/services/ListUsersService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email, cpf, name, password, type } = request.body;
-    
+
     const createUserService = container.resolve(CreateUserService);
 
-    const user = await createUserService.execute({
+    await createUserService.execute({
       email,
       cpf,
       name,
@@ -16,10 +17,14 @@ class UsersController {
       type,
     });
 
-    return response.json(user);
+    return response.status(204).json({});
   }
   public async index(request: Request, response: Response): Promise<Response> {
-    return response.json();
+    const listUsersService = container.resolve(ListUsersService);
+
+    const users = await listUsersService.execute();
+
+    return response.json(users);
   }
   public async show(request: Request, response: Response): Promise<Response> {
     return response.json();

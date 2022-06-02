@@ -7,5 +7,5 @@ export interface Class {
     module:Module;
     content:string,
     link:string,
-    score:string,
+    score:number,
 }

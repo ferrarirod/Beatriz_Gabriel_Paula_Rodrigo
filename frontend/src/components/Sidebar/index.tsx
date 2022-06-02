@@ -1,9 +1,13 @@
 import { Layout, Menu } from "antd";
 import { useState } from "react";
 import { MenuLink } from "../MenuLink";
-import { DashboardFilled } from "@ant-design/icons";
+import {
+  DashboardFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 
 const { Sider } = Layout;
+
 export function SideBar() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -16,8 +20,10 @@ export function SideBar() {
         className="logo"
         style={{ height: "40px", backgroundColor: "#c7c7c7", margin: "16px" }}
       />
-      <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-        <MenuLink to="/" text="Painel" icon={<DashboardFilled />} />
+      <Menu theme="dark"  mode="inline">
+        <MenuLink to="/" key="1" text="Painel" icon={<DashboardFilled />} />
+        <MenuLink to="/users" key="2" text="Usuários" icon={<UserOutlined />} />
+        <MenuLink to="/classes" key="2" text="Aulas" icon={<UserOutlined />} />
       </Menu>
     </Sider>
   );

@@ -33,11 +33,12 @@ class ClassesRepository implements IClassesRepository {
     link,
     score
   }: IUpdateClassDTO): Promise<Class> {
+    console.log(id, title,module,content,link,score)
     console.log('calling update from repository,  id received: ', id);
     const updatedClass = new Class({ title, module, content, link, score });
-    updatedClass.id = id;
-    await connection<Class>("classes").where('id', '=' , id).update({ title, module, content, link, score });
-
+    const query = connection<Class>("classes").where('id', '=' , id).update(updatedClass);
+    console.log(query.toSQL().toNative())
+    await  query;
     return updatedClass;
   }
   public async show({
