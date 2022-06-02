@@ -53,7 +53,6 @@ export function ListModulesPage() {
 
 
     const onClose = () => {
-        setEditing(false);
         setShowing(false);
     };
 
