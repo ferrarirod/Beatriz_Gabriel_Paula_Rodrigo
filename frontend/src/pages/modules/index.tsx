@@ -1,18 +1,14 @@
-import {
-    DeleteOutlined,
-    EditOutlined,
-    PlusCircleOutlined,
-    SearchOutlined,
-} from "@ant-design/icons";
 import { useCallback, useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { Module } from "../../providers/DataProvider";
-import { Row, Table, Space, Drawer, Button, Form, Input, } from 'antd';
+import { Link } from "react-router-dom";
+import { Module } from "../../types/moduleType";
+import { Table, Space, Drawer, Button, Form, Input, Row, } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
 import { SelectForm } from "../../components/Select";
 import { api } from '../../services/api';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 
 interface FormModule {
     id: string,
@@ -70,7 +66,7 @@ export function ListModulesPage() {
                     console.log(err);
                 });
         },
-        [handleModules, reset]
+        []
     );
 
     const handleCreateModule: SubmitHandler<FormModule> = useCallback(

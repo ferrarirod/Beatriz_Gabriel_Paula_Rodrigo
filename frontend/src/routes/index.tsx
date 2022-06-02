@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { ListUsersPage } from "../pages/users";
+import { ListClassesPage } from "../pages/classes";
 import { ListModulesPage } from "../pages/modules";
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
@@ -30,6 +31,14 @@ function AppRoutes() {
         element={
           <Private>
             <ListModulesPage />
+          </Private>
+        }
+      />
+      <Route
+        path="/classes"
+        element={
+          <Private>
+            <ListClassesPage />
           </Private>
         }
       />
