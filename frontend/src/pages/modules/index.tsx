@@ -31,7 +31,6 @@ export function ListModulesPage() {
     });
 
     const [modules, setModules] = useState<Module[]>();
-    const [editing, setEditing] = useState(false);
     const [showing, setShowing] = useState(false);
     const [selectedModule, setSelectedModule] = useState<Module>();
     const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
@@ -52,26 +51,12 @@ export function ListModulesPage() {
         handleModules();
     }, [handleModules]);
 
-    const showDrawer = (action: string) => {
-        if (action === 'editing')
-            setEditing(true);
-        else setShowing(true);
-    };
 
     const onClose = () => {
         setEditing(false);
         setShowing(false);
     };
 
-    const editModule = (record: Module) => {
-        showDrawer('editing');
-        setSelectedModule(record);
-    }
-
-    const showModule = (record: Module) => {
-        showDrawer('showing');
-        setSelectedModule(record);
-    }
 
     const handleShowModule: SubmitHandler<FormModule> = useCallback(
         async (id) => {
