@@ -16,7 +16,8 @@ class UpdateClassService {
       title,
       module,
       content,
-      link
+      link,
+      score
     }: IUpdateClassDTO): Promise<Class> {
   
       const Class = await this.ClassesRepository.update({
@@ -24,7 +25,8 @@ class UpdateClassService {
           title,
           module,
           content,
-          link
+          link,
+          score
       });
   
       return Class;

@@ -12,14 +12,15 @@ import { container } from "tsyringe";
 
 class ClassesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { title, module, content, link } = request.body;
+    const { title, module, content, link, score } = request.body;
     const createClassService = container.resolve(CreateClassService);
 
     const newClass = await createClassService.execute({
         title,
         module,
         content,
-        link
+        link,
+        score
     });
 
     return response.json(newClass);
@@ -37,7 +38,7 @@ class ClassesController {
     return response.json(selectedClass);
   }
   public async update(request: Request, response: Response): Promise<Response> {
-    const { title, module, content, link } = request.body;
+    const { title, module, content, link, score } = request.body;
     const id = request.params.id;
     console.log('calling update from controller, id received = ', id )
     const updateClassService = container.resolve(UpdateClassService);
@@ -46,7 +47,8 @@ class ClassesController {
       title,
       module,
       content,
-      link
+      link,
+      score
     });
     return response.json(updatedClass);
   }

@@ -12,6 +12,4 @@ export interface IClassesRepository {
   delete(data: IDeleteClassDTO) : Promise<Class[]>;
   show(data: IShowClassDTO) : Promise<Class[]>;
   index() : Promise<Class[]>;
-
-
 }

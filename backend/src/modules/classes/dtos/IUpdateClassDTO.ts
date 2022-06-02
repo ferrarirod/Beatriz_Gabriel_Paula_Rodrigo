@@ -4,4 +4,5 @@ export interface IUpdateClassDTO{
     module: string ;
     content: string ;
     link: string;
+    score:number;
 }

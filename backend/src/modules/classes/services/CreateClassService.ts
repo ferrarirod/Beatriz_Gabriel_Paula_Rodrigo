@@ -15,14 +15,17 @@ class CreateClassService {
     title,
     module,
     content,
-    link
+    link,
+    score
   }: ICreateClassDTO): Promise<Class> {
 
+    console.log('module id inside create class service', module)
     const Class = await this.ClassesRepository.create({
         title,
         module,
         content,
-        link
+        link,
+        score
     });
 
     return Class;

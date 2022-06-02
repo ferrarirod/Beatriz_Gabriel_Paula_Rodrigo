@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
 
     table.string("id").primary().notNullable();
     table.string("title").notNullable();
-    table.string("module").notNullable();
+    table.string("module").notNullable().references('id').inTable('modules').onDelete("cascade");
     table.text("content").notNullable();
     table.string("link").notNullable();
     table.integer('score').notNullable();

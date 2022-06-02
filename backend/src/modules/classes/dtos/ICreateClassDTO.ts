@@ -3,4 +3,5 @@ export interface ICreateClassDTO{
     module: string;
     content:string;
     link: string;
+    score: number
 }

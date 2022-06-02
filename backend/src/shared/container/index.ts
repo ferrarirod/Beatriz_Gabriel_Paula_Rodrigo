@@ -6,6 +6,8 @@ import { UsersRepository } from "@modules/users/infra/knex/repositories/UsersRep
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { ClassesRepository } from "@modules/classes/infra/knex/repositories/ClassesRepository";
 import { IClassesRepository } from "@modules/classes/repositories/IClassesRepository";
+import { ModuleRepository } from "@modules/modules/infra/knex/repositories/ModulesRepository";
+import { IModulesRepository } from "@modules/modules/repositories/IModulesRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -15,4 +17,8 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IClassesRepository>(
   "ClassesRepository",
   ClassesRepository
+);
+container.registerSingleton<IModulesRepository>(
+  "ModulesRepository",
+  ModuleRepository
 );
