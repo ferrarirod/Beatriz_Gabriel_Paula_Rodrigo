@@ -170,11 +170,17 @@ export function ListUsersPage() {
             },
           ]}
         />
-        <InputForm label="Senha" control={control} name="password" />
+        <InputForm
+          label="Senha"
+          control={control}
+          name="password"
+          type="password"
+        />
         <InputForm
           label="Confirmar Senha"
           control={control}
           name="confirmPassword"
+          type="password"
         />
         <Form.Item>
           <Space>

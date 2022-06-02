@@ -1,6 +1,6 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
-import { DashboardFilled, UserOutlined } from "@ant-design/icons";
+import { BookOutlined, DashboardFilled, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
@@ -26,6 +26,7 @@ function getItem(
 const items: MenuItem[] = [
   getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
   getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
+  getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
 ];
 
 export function SideBar() {
