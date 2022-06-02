@@ -22,6 +22,7 @@ interface DataUsers {
 }
 
 interface FormUser {
+  id?: string;
   name: string;
   email: string;
   cpf: string;
@@ -34,6 +35,7 @@ export function ListUsersPage() {
   const { reset, control, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
+      id: "",
       name: "",
       email: "",
       password: "",
@@ -91,6 +93,36 @@ export function ListUsersPage() {
     [handleUsers, reset]
   );
 
+  const handleUpdateUser: SubmitHandler<FormUser> = useCallback(
+    async (formValue) => {
+      api
+        .put(`/users/${formValue.id}`, {
+          name: formValue.name,
+          email: formValue.email,
+          type: formValue.type,
+          password: formValue.password,
+          cpf: formValue.cpf,
+        })
+        .then((response) => {
+          handleUsers();
+          setVisibleCreate(false);
+          reset({
+            id: "",
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            cpf: "",
+            type: 1,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [handleUsers, reset]
+  );
+
   const columns: ColumnsType<DataUsers> = [
     {
       title: "Name",
@@ -114,6 +146,7 @@ export function ListUsersPage() {
             type="primary"
             onClick={() => {
               reset({
+                id: _.id,
                 name: _.name,
                 email: _.email,
                 password: "",
@@ -208,7 +241,8 @@ export function ListUsersPage() {
         onClose={() => {
           setVisibleEdit(false);
         }}
-        visible={visibleEdit}>
+        visible={visibleEdit}
+        onSubmit={handleSubmit(handleUpdateUser)}>
         <InputForm label="Nome" control={control} name="name" />
         <InputForm label="E-mail" control={control} name="email" />
         <InputForm label="CPF" control={control} name="cpf" />
@@ -227,14 +261,22 @@ export function ListUsersPage() {
             },
           ]}
         />
-        <InputForm label="Senha" control={control} name="password" />
+        <InputForm
+          label="Senha"
+          control={control}
+          name="password"
+          type="password"
+        />
         <InputForm
           label="Confirmar Senha"
           control={control}
           name="confirmPassword"
+          type="password"
         />
         <Form.Item>
-          <Button type="primary">Salvar</Button>
+          <Button htmlType="submit" type="primary">
+            Salvar
+          </Button>
         </Form.Item>
       </FormDrawer>
     </>

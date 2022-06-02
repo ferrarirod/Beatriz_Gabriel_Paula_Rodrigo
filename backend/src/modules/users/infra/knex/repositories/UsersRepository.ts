@@ -3,8 +3,42 @@ import { IFindByEmailOrCpf } from "@modules/users/dtos/IFindByEmailOrCpfDTO";
 import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { User } from "../entities/User";
 import { connection } from "@shared/infra/knex";
+import { IUpdateUserDTO } from "@modules/users/dtos/IUpdateUserDTO";
 
 class UsersRepository implements IUsersRepository {
+  public async update({
+    id,
+    cpf,
+    email,
+    name,
+    password,
+    type,
+  }: IUpdateUserDTO): Promise<void> {
+    await connection<User>("users").where({ id }).first().update({
+      cpf,
+      email,
+      name,
+      password,
+      type,
+    });
+  }
+  public async delete(id: string): Promise<void> {
+    await connection<User>("users")
+      .where({
+        id,
+      })
+      .first()
+      .delete();
+  }
+
+  public async findById(id: string): Promise<User | undefined> {
+    return await connection<User>("users")
+      .where({
+        id,
+      })
+      .first();
+  }
+
   public async findByEmail(email: string): Promise<User | undefined> {
     const user = connection<User>("users")
       .where({
