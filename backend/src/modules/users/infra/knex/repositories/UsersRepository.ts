@@ -5,6 +5,15 @@ import { User } from "../entities/User";
 import { connection } from "@shared/infra/knex";
 
 class UsersRepository implements IUsersRepository {
+  public async findByEmail(email: string): Promise<User | undefined> {
+    const user = connection<User>("users")
+      .where({
+        email,
+      })
+      .first();
+
+    return user;
+  }
 
   public async findAll(): Promise<User[]> {
     const users = await connection<User>("users").select();

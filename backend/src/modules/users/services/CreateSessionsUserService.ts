@@ -21,7 +21,7 @@ class CreateSessionUserService {
 
   public async execute({ email, password }: IRequest) {
     const user = await this.usersRepository.findByEmail(email);
-
+    
     if (!user) {
       throw new AppError("User not found.", 404);
     }
