@@ -73,6 +73,22 @@ export function ListModulesPage() {
         setSelectedModule(record);
     }
 
+    const handleShowModule: SubmitHandler<FormModule> = useCallback(
+        async (id) => {
+            const url = '/modules/' + id
+            api
+                .get(url)
+                .then((response) => {
+                    setSelectedModule(response.data[0])
+                    setShowing(true)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        [handleModules, reset]
+    );
+
     const handleCreateModule: SubmitHandler<FormModule> = useCallback(
         async (formValue) => {
             api
@@ -121,12 +137,34 @@ export function ListModulesPage() {
         [handleModules, reset]
     );
 
+    const handleDeleteModule: SubmitHandler<FormModule> = useCallback(
+        async (id) => {
+            const url = '/modules/' + id
+            api
+                .delete(url)
+                .then((response) => {
+                    handleModules();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        [handleModules, reset]
+    );
+
     const columns: ColumnsType<Module> = [
         {
             title: 'Título',
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <a onClick={() => editModule(record)}>{text}</a>,
+            render: (text, record) => <a onClick={() => {
+                reset({
+                    id: record.id,
+                    name: record.name,
+                    description: record.description,
+                });
+                setVisibleEdit(true);
+            }}>{text}</a>,
         },
         {
             title: 'Descrição',
@@ -138,7 +176,10 @@ export function ListModulesPage() {
             key: 'action',
             render: (_, record) => (
                 <Space>
-                    <Button>
+                    <Button
+                        onClick={() => {
+                            handleShowModule(_.id)
+                        }}>
                         <SearchOutlined />
                     </Button>
                     <Button
@@ -153,7 +194,11 @@ export function ListModulesPage() {
                         }}>
                         <EditOutlined />
                     </Button>
-                    <Button type="primary" danger>
+                    <Button type="primary"
+                        onClick={() => {
+                            handleDeleteModule(_.id)
+                        }}
+                        danger>
                         <DeleteOutlined />
                     </Button>
                 </Space>
@@ -204,7 +249,6 @@ export function ListModulesPage() {
             <Drawer title={`${selectedModule?.name}`} placement="right" onClose={onClose} visible={showing}>
                 <h1>{selectedModule?.name}</h1>
                 <p>{selectedModule?.description}</p>
-
             </Drawer>
 
             <FormDrawer

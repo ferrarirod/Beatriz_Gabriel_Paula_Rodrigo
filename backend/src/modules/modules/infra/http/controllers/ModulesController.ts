@@ -28,7 +28,10 @@ class ModulesController {
     return response.json(modules);
   }
   public async show(request: Request, response: Response): Promise<Response> {
-    return response.json();
+    const id = request.params.id;
+    const showModuleService = container.resolve(ShowModuleService);
+    const selectedModule = await showModuleService.execute({ id });
+    return response.json(selectedModule);
   }
   public async update(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
