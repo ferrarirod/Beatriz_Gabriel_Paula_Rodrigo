@@ -6,6 +6,7 @@ interface FormDrawerProps {
   title: string;
   visible: boolean;
   onClose: () => void;
+  onSubmit?: () => void;
 }
 
 export function FormDrawer({
@@ -13,10 +14,11 @@ export function FormDrawer({
   title,
   visible,
   onClose,
+  onSubmit
 }: FormDrawerProps) {
   return (
     <Drawer title={title} onClose={onClose} visible={visible}>
-      <Form layout="vertical">{children}</Form>
+      <Form layout="vertical" onFinish={onSubmit}>{children}</Form>
     </Drawer>
   );
 }

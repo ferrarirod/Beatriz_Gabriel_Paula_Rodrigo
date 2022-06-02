@@ -24,16 +24,30 @@ class ModulesController {
   public async index(request: Request, response: Response): Promise<Response> {
     const indexModuleService = container.resolve(IndexModuleService);
     const modules = await indexModuleService.execute();
+
     return response.json(modules);
   }
   public async show(request: Request, response: Response): Promise<Response> {
     return response.json();
   }
   public async update(request: Request, response: Response): Promise<Response> {
-    return response.json();
+    const { name, description } = request.body;
+    const id = request.params.id;
+
+    const updateModuleService = container.resolve(UpdateModuleService);
+    const updatedModule = await updateModuleService.execute({
+      id,
+      name,
+      description,
+    });
+
+    return response.json(updatedModule);
   }
   public async delete(request: Request, response: Response): Promise<Response> {
-    return response.json();
+    const id = request.params.id;
+    const deleteModuleService = container.resolve(DeleteModuleService);
+    const deletedModule = await deleteModuleService.execute({ id });
+    return response.json(deletedModule);
   }
 }
 

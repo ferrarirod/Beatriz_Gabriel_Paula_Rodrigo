@@ -1,37 +1,56 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {
+    DeleteOutlined,
+    EditOutlined,
+    PlusCircleOutlined,
+    SearchOutlined,
+} from "@ant-design/icons";
+import { useCallback, useEffect, useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Module } from "../../providers/DataProvider";
-import { Table, Space, Drawer, Button, Form, Input, } from 'antd';
+import { Row, Table, Space, Drawer, Button, Form, Input, } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
+import { FormDrawer } from "../../components/Form";
+import { InputForm } from "../../components/Input";
+import { SelectForm } from "../../components/Select";
 import { api } from '../../services/api';
 
-const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-};
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
+interface FormModule {
+    id: string,
+    name: string;
+    description: string;
+}
 
 export function ListModulesPage() {
+    const { register, reset, getValues, control, handleSubmit } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            id: "",
+            name: "",
+            description: ""
+        },
+    });
+
     const [modules, setModules] = useState<Module[]>();
     const [editing, setEditing] = useState(false);
     const [showing, setShowing] = useState(false);
     const [selectedModule, setSelectedModule] = useState<Module>();
+    const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
+    const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
 
-    async function getModules() {
-        try {
-            const response = await api.get("modules");
-            setModules(response.data);
-
-        } catch (err) {
-            console.log('erro', JSON.stringify(err));
-        };
-    }
-    useEffect(() => {
-        getModules();
-        console.log('modules', modules?.length)
+    const handleModules = useCallback(() => {
+        api
+            .get("/modules")
+            .then((response) => {
+                setModules(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
+
+    useEffect(() => {
+        handleModules();
+    }, [handleModules]);
 
     const showDrawer = (action: string) => {
         if (action === 'editing')
@@ -52,12 +71,56 @@ export function ListModulesPage() {
     const showModule = (record: Module) => {
         showDrawer('showing');
         setSelectedModule(record);
-
-
     }
-    const onFinish = () => {
 
-    }
+    const handleCreateModule: SubmitHandler<FormModule> = useCallback(
+        async (formValue) => {
+            api
+                .post("/modules", {
+                    name: formValue.name,
+                    description: formValue.description,
+                })
+                .then((response) => {
+                    handleModules();
+                    setVisibleCreate(false);
+                    reset({
+                        id: "",
+                        name: "",
+                        description: "",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        [handleModules, reset]
+    );
+
+    const handleUpdateModule: SubmitHandler<FormModule> = useCallback(
+        async (formValue) => {
+            const url = '/modules/' + formValue.id
+            api
+                .put(url, {
+
+                    name: formValue.name,
+                    description: formValue.description,
+                })
+                .then((response) => {
+                    handleModules();
+                    setVisibleEdit(false);
+                    reset({
+                        id: "",
+                        name: "",
+                        description: "",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        [handleModules, reset]
+    );
+
     const columns: ColumnsType<Module> = [
         {
             title: 'Título',
@@ -74,55 +137,108 @@ export function ListModulesPage() {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Space size="middle">
-                    <a onClick={() => showModule(record)}>Ver</a>
-                    <a onClick={() => editModule(record)}>Edit</a>
-                    <a>Delete</a>
+                <Space>
+                    <Button>
+                        <SearchOutlined />
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            reset({
+                                id: _.id,
+                                name: _.name,
+                                description: _.description,
+                            });
+                            setVisibleEdit(true);
+                        }}>
+                        <EditOutlined />
+                    </Button>
+                    <Button type="primary" danger>
+                        <DeleteOutlined />
+                    </Button>
                 </Space>
             ),
         },
     ];
 
     return (
-        <div>
-            <h1>Lista de Módulos</h1>
-            <Link to="/home" >Home</Link>
+        <>
+            <Row justify="space-between">
+                <h1>Lista de Módulos</h1>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setVisibleCreate(true);
+                    }}>
+                    <PlusCircleOutlined /> Adicionar
+                </Button>
+            </Row>
             <Table columns={columns} dataSource={modules} />
+            <FormDrawer
+                title="Cadastrando Módulo"
+                onClose={() => {
+                    setVisibleCreate(false);
+                }}
+                visible={visibleCreate}
+                onSubmit={handleSubmit(handleCreateModule)}>
+                <InputForm label="Título" control={control} name="name" />
+                <InputForm label="Descrição" control={control} name="description" />
+                <Form.Item>
+                    <Space>
+                        <Button htmlType="submit" type="primary">
+                            Cadastrar
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                reset({
+                                    id: "",
+                                    name: "",
+                                    description: "",
+                                });
+                            }}>
+                            Limpar
+                        </Button>
+                    </Space>
+                </Form.Item>
+            </FormDrawer>
             <Drawer title={`${selectedModule?.name}`} placement="right" onClose={onClose} visible={showing}>
                 <h1>{selectedModule?.name}</h1>
                 <p>{selectedModule?.description}</p>
 
             </Drawer>
 
-            <Drawer title={`Editar ${selectedModule?.name}`} placement="right" onClose={onClose} visible={editing}>
-                <Form
-                    name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        label="Título"
-                        name="name"
-                        rules={[{ required: true, message: 'O título do módulo é obrigatório' }]}
-                    >
-                        <Input defaultValue={selectedModule?.name} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Descrição"
-                        name="description"
-                    >
-                        <Input defaultValue={selectedModule?.description} />
-                    </Form.Item>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
+            <FormDrawer
+                title="Editando Módulo"
+                onClose={() => {
+                    setVisibleEdit(false);
+                    reset({
+                        name: "",
+                        description: "",
+                    });
+                }}
+                visible={visibleEdit}
+                onSubmit={handleSubmit(handleUpdateModule)}>
+                <InputForm label="Título" control={control} name="name" />
+                <InputForm label="Descrição" control={control} name="description" />
+                <InputForm hidden label="" control={control} name="id" />
+
+                <Form.Item>
+                    <Space>
+                        <Button htmlType="submit" type="primary">
                             Salvar
                         </Button>
-                    </Form.Item>
-                </Form>
-            </Drawer>
-        </div>
+                        <Button
+                            onClick={() => {
+                                reset({
+                                    name: "",
+                                    description: "",
+                                });
+                            }}>
+                            Limpar
+                        </Button>
+                    </Space>
+                </Form.Item>
+            </FormDrawer>
+        </>
     )
 }
