@@ -12,7 +12,8 @@ import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
 import { SelectForm } from "../../components/Select";
 import { api } from "../../services/api";
-
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 interface DataUsers {
   id: string;
   name: string;
@@ -31,9 +32,32 @@ interface FormUser {
   confirmPassword: string;
 }
 
+const validationUser = yup.object().shape({
+  name: yup.string().required("O nome é obrigatório"),
+  email: yup
+    .string()
+    .email("E-mail inválido")
+    .required("O email é obrigatório"),
+  type: yup.number().required("O tipo é obrigatório"),
+  cpf: yup.string().required("O CPF é obrigatório"),
+  password: yup
+    .string()
+    .required("A senha é obrigatória")
+    .min(6, "Senha muito fraca"),
+  confirmPassword: yup
+    .string()
+    .oneOf([null, yup.ref("password")], "As senhas precisam ser iguais"),
+});
+
 export function ListUsersPage() {
-  const { reset, control, handleSubmit } = useForm({
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     mode: "onChange",
+    resolver: yupResolver(validationUser),
     defaultValues: {
       id: "",
       name: "",
@@ -77,6 +101,7 @@ export function ListUsersPage() {
         .then((response) => {
           handleUsers();
           setVisibleCreate(false);
+          setVisibleEdit(false);
           reset({
             name: "",
             email: "",
@@ -104,6 +129,7 @@ export function ListUsersPage() {
           cpf: formValue.cpf,
         })
         .then((response) => {
+          setVisibleEdit(false);
           handleUsers();
           setVisibleCreate(false);
           reset({
@@ -182,12 +208,35 @@ export function ListUsersPage() {
         title="Cadastrando Usuário"
         onClose={() => {
           setVisibleCreate(false);
+          reset({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            cpf: "",
+            type: 1,
+          });
         }}
         visible={visibleCreate}
         onSubmit={handleSubmit(handleCreateUser)}>
-        <InputForm label="Nome" control={control} name="name" />
-        <InputForm label="E-mail" control={control} name="email" />
-        <InputForm label="CPF" control={control} name="cpf" />
+        <InputForm
+          label="Nome"
+          control={control}
+          name="name"
+          error={errors.name}
+        />
+        <InputForm
+          label="E-mail"
+          control={control}
+          name="email"
+          error={errors.email}
+        />
+        <InputForm
+          label="CPF"
+          control={control}
+          name="cpf"
+          error={errors.cpf}
+        />
         <SelectForm
           control={control}
           name="type"
@@ -202,18 +251,21 @@ export function ListUsersPage() {
               value: 1,
             },
           ]}
+          error={errors.type}
         />
         <InputForm
           label="Senha"
           control={control}
           name="password"
           type="password"
+          error={errors.password}
         />
         <InputForm
           label="Confirmar Senha"
           control={control}
           name="confirmPassword"
           type="password"
+          error={errors.confirmPassword}
         />
         <Form.Item>
           <Space>
@@ -240,12 +292,35 @@ export function ListUsersPage() {
         title="Editando Usuário"
         onClose={() => {
           setVisibleEdit(false);
+          reset({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            cpf: "",
+            type: 1,
+          });
         }}
         visible={visibleEdit}
         onSubmit={handleSubmit(handleUpdateUser)}>
-        <InputForm label="Nome" control={control} name="name" />
-        <InputForm label="E-mail" control={control} name="email" />
-        <InputForm label="CPF" control={control} name="cpf" />
+        <InputForm
+          label="Nome"
+          control={control}
+          name="name"
+          error={errors.name}
+        />
+        <InputForm
+          label="E-mail"
+          control={control}
+          name="email"
+          error={errors.email}
+        />
+        <InputForm
+          label="CPF"
+          control={control}
+          name="cpf"
+          error={errors.cpf}
+        />
         <SelectForm
           control={control}
           name="type"
@@ -260,18 +335,21 @@ export function ListUsersPage() {
               value: 1,
             },
           ]}
+          error={errors.type}
         />
         <InputForm
           label="Senha"
           control={control}
           name="password"
           type="password"
+          error={errors.password}
         />
         <InputForm
           label="Confirmar Senha"
           control={control}
           name="confirmPassword"
           type="password"
+          error={errors.confirmPassword}
         />
         <Form.Item>
           <Button htmlType="submit" type="primary">

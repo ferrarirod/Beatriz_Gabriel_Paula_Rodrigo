@@ -11,9 +11,10 @@ interface SelectFormProps {
     label: string;
     value: any;
   }[];
+  error?: any
 }
 
-export function SelectForm({ control, label, name, options }: SelectFormProps) {
+export function SelectForm({ control, label, name, options, error }: SelectFormProps) {
   return (
     <Form.Item label={label}>
       <Controller
@@ -29,6 +30,7 @@ export function SelectForm({ control, label, name, options }: SelectFormProps) {
           </Select>
         )}
       />
+      {error && <p style={{ color: "red" }}>{error.message}</p>}
     </Form.Item>
   );
 }

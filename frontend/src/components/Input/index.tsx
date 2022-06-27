@@ -5,6 +5,7 @@ interface InputFormProps extends InputProps {
   label: string;
   name: string;
   control: Control<any, any>;
+  error?: any;
 }
 
 export function InputForm({
@@ -12,6 +13,7 @@ export function InputForm({
   value,
   control,
   name,
+  error,
   ...rest
 }: InputFormProps) {
   return (
@@ -21,6 +23,7 @@ export function InputForm({
         name={name}
         render={({ field }) => <Input {...field} {...rest} />}
       />
+      {error && <p style={{ color: "red" }}>{error.message}</p>}
     </Form.Item>
   );
 }
