@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Module } from "../../types/moduleType";
-import { Table, Space, Drawer, Button, Form, Input, Row, } from 'antd';
+import { Table, Space, Drawer, Button, Form, Row, } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
-import { SelectForm } from "../../components/Select";
 import { api } from '../../services/api';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
@@ -17,7 +15,7 @@ interface FormModule {
 }
 
 export function ListModulesPage() {
-    const { register, reset, getValues, control, handleSubmit } = useForm({
+    const { reset, control, handleSubmit } = useForm({
         mode: "onChange",
         defaultValues: {
             id: "",

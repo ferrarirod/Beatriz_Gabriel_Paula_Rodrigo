@@ -1,7 +1,14 @@
 import { Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
-import { BookOutlined, DashboardFilled, PlayCircleOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  DashboardFilled,
+  PlayCircleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
+
+const Logo = require("../../assets/webmaster-bg-full.png");
 
 const { Sider } = Layout;
 
@@ -27,7 +34,7 @@ const items: MenuItem[] = [
   getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
   getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
   getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
-  getItem(<Link to="/classes">Aulas</Link>, "3", <PlayCircleOutlined />),
+  getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
 ];
 
 export function SideBar() {
@@ -38,12 +45,13 @@ export function SideBar() {
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}>
-      <div
+      <img
         className="logo"
-        style={{ height: "40px", backgroundColor: "#c7c7c7", margin: "16px" }}
+        src={Logo}
+        alt="Web Master"
+        style={{ height: "64px", width: "104px", margin: "0 50px" }}
       />
       <Menu theme="dark" mode="inline" items={items} />
-     
     </Sider>
   );
 }
