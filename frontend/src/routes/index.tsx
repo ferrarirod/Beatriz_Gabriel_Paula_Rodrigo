@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { ListUsersPage } from "../pages/users";
 import { ListClassesPage } from "../pages/classes";
+import { ViewClass } from "../pages/classes/view";
 import { ListModulesPage } from "../pages/modules";
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
@@ -8,6 +9,7 @@ import { LoginPage } from "../pages/login";
 function AppRoutes() {
   return (
     <Routes>
+      <Route path="/classes/view" element={<ViewClass />}/>
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/"
