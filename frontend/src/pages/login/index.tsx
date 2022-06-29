@@ -28,7 +28,7 @@ export function LoginPage() {
 
   const handleCreateSession: SubmitHandler<ISessionData> = useCallback(
     async (formValue) => {
-      console.log(formValue);
+     
       signIn({
         email: formValue.email,
         password: formValue.password,

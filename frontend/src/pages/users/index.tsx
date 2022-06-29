@@ -4,7 +4,7 @@ import {
   PlusCircleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Row, Space, Table } from "antd";
+import { Button, Drawer, Form, message, Row, Space, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -71,7 +71,9 @@ export function ListUsersPage() {
 
   const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  const [visibleShow, setVisibleShow] = useState<boolean>(false);
   const [users, setUsers] = useState<DataUsers[]>([]);
+  const [user, setUser] = useState<DataUsers>({} as DataUsers);
 
   const handleUsers = useCallback(() => {
     api
@@ -110,9 +112,11 @@ export function ListUsersPage() {
             cpf: "",
             type: 1,
           });
+          message.success("Usuário criado com sucesso.");
         })
         .catch((err) => {
           console.log(err);
+          message.error("Não foi possível criar usuário.");
         });
     },
     [handleUsers, reset]
@@ -141,12 +145,30 @@ export function ListUsersPage() {
             cpf: "",
             type: 1,
           });
+          message.success("Usuário atualizado com sucesso.");
         })
         .catch((err) => {
           console.log(err);
+          message.error("Não foi possível atualizar usuário.");
         });
     },
     [handleUsers, reset]
+  );
+
+  const handleDeleteUser = useCallback(
+    async (id: any) => {
+      api
+        .delete(`/users/${id}`)
+        .then((response) => {
+          handleUsers();
+          message.success("Usuário apagado com sucesso.");
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Não foi possível apagar o usuário.");
+        });
+    },
+    [handleUsers]
   );
 
   const columns: ColumnsType<DataUsers> = [
@@ -165,7 +187,11 @@ export function ListUsersPage() {
       key: "action",
       render: (_, record) => (
         <Space>
-          <Button>
+          <Button
+            onClick={() => {
+              setVisibleShow(true);
+              setUser(_);
+            }}>
             <SearchOutlined />
           </Button>
           <Button
@@ -184,7 +210,12 @@ export function ListUsersPage() {
             }}>
             <EditOutlined />
           </Button>
-          <Button type="primary" danger>
+          <Button
+            type="primary"
+            danger
+            onClick={() => {
+              handleDeleteUser(_.id);
+            }}>
             <DeleteOutlined />
           </Button>
         </Space>
@@ -357,6 +388,16 @@ export function ListUsersPage() {
           </Button>
         </Form.Item>
       </FormDrawer>
+      <Drawer onClose={() => setVisibleShow(false)} visible={visibleShow}>
+        <h3>Nome</h3>
+        <p>{user.name}</p>
+        <h3>E-mail</h3>
+        <p>{user.email}</p>
+        <h3>CPF</h3>
+        <p>{user.cpf}</p>
+        <h3>Tipo</h3>
+        <p>{user.type === 1 ? "Aluno" : "Administrador"}</p>
+      </Drawer>
     </>
   );
 }
