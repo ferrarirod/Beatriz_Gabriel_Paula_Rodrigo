@@ -35,6 +35,8 @@ const items: MenuItem[] = [
   getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
   getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
   getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
+  getItem(<Link to="/tasks">Tarefas</Link>, "", <PlayCircleOutlined />),
+
 ];
 
 export function SideBar() {
