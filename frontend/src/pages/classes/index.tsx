@@ -5,6 +5,7 @@ import {
     SearchOutlined,
 } from "@ant-design/icons";
 import {  useEffect, useState, useCallback} from "react";
+import { Link } from "react-router-dom";
 import { Class } from "../../types/classType";
 import { Module } from "../../types/moduleType";
 import {  SubmitHandler, useForm } from "react-hook-form";
@@ -227,17 +228,25 @@ export function ListClassesPage(){
           render: (text,record)=> <span>{record.module.name}</span>,
         },
         {
+          title: 'Pontuação',
+          dataIndex: 'score',
+          key: 'score',
+          render: (text,record)=> <span>{record.score}</span>,
+        },
+        {
           title: 'Action',
           key: 'action',
           render: (_, record) => (
             <Space>
-            <Button
-                onClick={() => {
-                showClass(record);
-                }}
-            >
-              <SearchOutlined />
-            </Button>
+              <Link to={"/classes/view/"+record.id}>
+                <Button
+                    // onClick={() => {
+                    // showClass(record);
+                    // }}
+                >
+                  <SearchOutlined />
+                </Button>
+              </Link>        
             <Button
               type="primary"
               onClick={() => {
@@ -288,6 +297,7 @@ export function ListClassesPage(){
                 <h1>{selectedClass?.title}</h1>
                 <i>{selectedClass?.module.name}</i>
                 <p>{selectedClass?.content}</p>
+                <p>Pontuação: {selectedClass?.score} pontos</p>
                 <div className="h_iframe">
                     <iframe src={formatUrl(selectedClass?.link)} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ></iframe>
                 </div>

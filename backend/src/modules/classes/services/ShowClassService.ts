@@ -15,7 +15,7 @@ class ShowClassService {
       id,
     }: IShowClassDTO): Promise<Class[]> {
   
-      const Class = await this.ClassesRepository.delete({
+      const Class = await this.ClassesRepository.show({
           id,
       });
   

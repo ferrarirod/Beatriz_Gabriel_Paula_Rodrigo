@@ -9,7 +9,6 @@ import { LoginPage } from "../pages/login";
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/classes/view" element={<ViewClass />}/>
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/"
@@ -44,6 +43,12 @@ function AppRoutes() {
           </Private>
         }
       />
+      <Route path="/classes/view/:id"   element={
+          <Private>
+            <ViewClass />
+          </Private>
+        }/>
+
       {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
