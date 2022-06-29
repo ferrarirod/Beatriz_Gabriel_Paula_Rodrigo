@@ -42,7 +42,7 @@ export function ListClassesPage(){
     const [moduleOptions, setModuleOptions ]= useState<ModuleOption[]>();
     const [selectedClass, setSelectedClass ]= useState<Class>();
 
-    const { reset, getValues, control, handleSubmit } = useForm({
+    const { reset, control, handleSubmit } = useForm({
         mode: "onChange",
         defaultValues: {
         id:"",
@@ -59,6 +59,8 @@ export function ListClassesPage(){
         try {
             const response = await  api.get("classes");
             setClasses(response.data);
+            console.log(response.data);
+            
         
         }catch(err){
         console.log('erro',JSON.stringify(err));
@@ -121,15 +123,17 @@ export function ListClassesPage(){
 
     const handleUpdateClass: SubmitHandler<FormClass> = useCallback(
         async (formValue) => {
-            console.log(formValue);
+        
+          let data = {
+            title: formValue.title,
+            module: formValue.module,
+            content: formValue.content,
+            link: formValue.link,
+            score: formValue.score,
+        }
+        console.log('formValue',formValue)
 
-            api.put(`classes/${formValue.id}`, {
-                title: formValue.title,
-                module: formValue.module,
-                content: formValue.content,
-                link: formValue.link,
-                score: formValue.score,
-            })
+            api.put(`classes/${formValue.id}`, data)
             .then((response) => {
               getClasses();
               setVisibleEdit(false);
@@ -149,18 +153,22 @@ export function ListClassesPage(){
         [getClasses, reset]
         
     );
+    
+    const handleDeleteClass: SubmitHandler<FormClass> = useCallback(
+      async (id) => {
+          const url = '/classes/' + id
+          api
+              .delete(url)
+              .then((response) => {
+                  getClasses();
+              })
+              .catch((err) => {
+                  console.log(err);
+              });
+      },
+      [getClasses, reset]
+  );
 
-
-    async function deleteClass(data:Class){
-        setSelectedClass(data);
-        try {
-            await api.delete(`classes/${selectedClass?.id}`);
-            getClasses();
-        
-        }catch(err){
-        console.log('erro',JSON.stringify(err));
-        }; 
-    }
 
     const showDrawer = (action : string) => {
         if (action ==='editing')
@@ -197,7 +205,20 @@ export function ListClassesPage(){
           title: 'Título',
           dataIndex: 'title',
           key: 'title',
-          render: (text,record)=> <a onClick={()=> showClass(record)}>{text}</a>,
+          render: (text,record)=> <a onClick={
+            ()=> {
+              reset({
+                id: record.id,
+                title: record.title,
+                module: record.module.id,
+                content: record.content,
+                link: record.link,
+                score:record.score,
+            });
+            setVisibleEdit(true); 
+            }
+          
+          }>{text}</a>,
         },
         {
           title: 'Módulo',
@@ -223,7 +244,7 @@ export function ListClassesPage(){
                 reset({
                    id: _.id,
                    title: _.title,
-                   module: _.module.name,
+                   module: _.module.id,
                    content: _.content,
                    link: _.link,
                    score: _.score
@@ -234,8 +255,8 @@ export function ListClassesPage(){
             </Button>
             <Button type="primary" danger
              onClick={() => {
-                deleteClass(record);
-               }}
+              handleDeleteClass(_.id)
+          }}
             >
               <DeleteOutlined />
             </Button>
@@ -351,13 +372,11 @@ export function ListClassesPage(){
                 onSubmit={handleSubmit(handleUpdateClass)}
                 >
                 <InputForm hidden label=""                 
-                value={getValues("id")}
                 control={control} name="id" />
                 <InputForm
                 name="title"
                 control={control}
                 label="Título"
-                value={getValues("title")}
                 />
                 <SelectForm
                 control={control}
@@ -368,16 +387,15 @@ export function ListClassesPage(){
                 <InputForm 
                 control={control}
                 name="content"
-                label="Conteúdo" value={getValues("content")} />
+                label="Conteúdo" />
                 <InputForm 
                 control={control}
                 name="link"
-                label="Link para vídeo da aula" value={getValues("link")} />
+                label="Link para vídeo da aula" />
                 <InputForm
                 name="score"
                 control={control}
                 label="Score"
-                value={getValues("score")}
                 />
                 <Form.Item>
                 <Button htmlType="submit" type="primary">

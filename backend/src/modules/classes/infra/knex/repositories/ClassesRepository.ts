@@ -36,7 +36,7 @@ class ClassesRepository implements IClassesRepository {
     console.log(id, title,module,content,link,score)
     console.log('calling update from repository,  id received: ', id);
     const updatedClass = new Class({ title, module, content, link, score });
-    const query = connection<Class>("classes").where('id', '=' , id).update(updatedClass);
+    const query = connection<Class>("classes").where({id}).update({ title, module, content, link, score });
     console.log(query.toSQL().toNative())
     await  query;
     return updatedClass;
@@ -57,11 +57,15 @@ class ClassesRepository implements IClassesRepository {
   }
   
   public async index(): Promise<Class[]>{
-    const result = await connection<Class>("classes").select().join('modules', 'classes.module', '=', 'modules.id').options({nestTables: true}).select()
+    const result = await connection<Class>("classes").select('classes.*','modules.id','modules.name','modules.description').
+                                                      join('modules', 'classes.module', '=', 'modules.id')
+                                                      .options({nestTables: true})
+                                                      
     const allClasses = [] as Class[];
     result.map( ({classes,modules}) =>{
       const aClass = new Class(classes)
       aClass.module = modules;
+      aClass.id = classes.id;
       allClasses.push(aClass);
     })
     return allClasses;
