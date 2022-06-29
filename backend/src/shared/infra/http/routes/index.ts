@@ -4,6 +4,7 @@ import { usersRoutes } from "@modules/users/infra/http/routes/users.routes";
 import { sessionsRoutes } from "@modules/users/infra/http/routes/sessions.routes";
 import { classesRoutes } from "@modules/classes/infra/http/routes/classes.routes";
 import { modulesRoutes } from "@modules/modules/infra/http/routes/modules.routes";
+import { commentsRoutes } from "@modules/comments/infra/http/routes/comments.routes";
 
 
 const routes = Router();
@@ -12,6 +13,7 @@ routes.use("/users", usersRoutes);
 routes.use("/sessions", sessionsRoutes)
 routes.use("/classes", classesRoutes);
 routes.use("/modules", modulesRoutes);
+routes.use("/comments", commentsRoutes);
 
 
 export { routes };

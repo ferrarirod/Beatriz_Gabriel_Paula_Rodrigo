@@ -8,6 +8,8 @@ import { ClassesRepository } from "@modules/classes/infra/knex/repositories/Clas
 import { IClassesRepository } from "@modules/classes/repositories/IClassesRepository";
 import { ModuleRepository } from "@modules/modules/infra/knex/repositories/ModulesRepository";
 import { IModulesRepository } from "@modules/modules/repositories/IModulesRepository";
+import { CommentRepository } from "@modules/comments/infra/knex/repositories/CommentsRepository";
+import { ICommentsRepository } from "@modules/comments/repositories/ICommentsRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -21,4 +23,8 @@ container.registerSingleton<IClassesRepository>(
 container.registerSingleton<IModulesRepository>(
   "ModulesRepository",
   ModuleRepository
+);
+container.registerSingleton<ICommentsRepository>(
+  "CommentsRepository",
+  CommentRepository
 );
