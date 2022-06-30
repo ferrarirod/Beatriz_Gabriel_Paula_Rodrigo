@@ -8,7 +8,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string("title").notNullable();
     table.string("class_id").notNullable().references('id').inTable('classes').onDelete("cascade").onUpdate("cascade");
     table.text("description").notNullable();
-    table.boolean("status").notNullable();
+    table.integer("score").notNullable();
+    table.boolean("status");
     table.dateTime("created_at").notNullable();
     table.dateTime("updated_at").notNullable();
   });

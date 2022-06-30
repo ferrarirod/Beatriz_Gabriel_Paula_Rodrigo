@@ -15,6 +15,7 @@ class CreateTaskService {
     title,
     class_id,
     description,
+score,
     status
   }: ICreateTaskDTO): Promise<Task> {
 
@@ -22,6 +23,7 @@ class CreateTaskService {
       title,
       class_id,
       description,
+score,
       status
     });
 

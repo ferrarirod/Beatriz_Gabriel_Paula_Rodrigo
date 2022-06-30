@@ -16,6 +16,7 @@ class UpdateTaskService {
       title,
       class_id,
       description,
+      score,
       status
     }: IUpdateTaskDTO): Promise<Task> {
   
@@ -24,6 +25,7 @@ class UpdateTaskService {
           title,
           class_id,
           description,
+          score,
           status
       });
   

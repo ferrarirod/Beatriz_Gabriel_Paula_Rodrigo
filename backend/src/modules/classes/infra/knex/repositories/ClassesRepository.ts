@@ -10,7 +10,6 @@ import { CreateClassService } from "@modules/classes/services/CreateClassService
 
 class ClassesRepository implements IClassesRepository {
 
-
   public async create({
     title,
     module,
@@ -44,7 +43,18 @@ class ClassesRepository implements IClassesRepository {
   public async show({
     id
   }: IShowClassDTO) :Promise<Class[]>{
-    const selectedClass = await connection<Class>("classes").where('id', '=' , id);
+    const selectedClass = [] as Class[];
+    const result = await connection<Class>("classes").where('classes.id', '=' , id)
+                                                      .select('classes.*','modules.id','modules.name','modules.description')
+                                                      .join('modules', 'classes.module', '=', 'modules.id')
+                                                      .options({nestTables: true});
+                                                      const allClasses = [] as Class[];
+    result.map( ({classes,modules}) =>{
+      const aClass = new Class(classes)
+      aClass.module = modules;
+      aClass.id = classes.id;
+      selectedClass.push(aClass);
+    })
     return selectedClass;
 
   }

@@ -14,12 +14,14 @@ class TasksRepository implements ITasksRepository {
     title,
     class_id,
     description,
+    score,
     status
   }: ICreateTaskDTO): Promise<Task> {
     
     const newTask = new Task({ title,
       class_id,
       description,
+      score,
       status});
 
     await connection<Task>("tasks").insert(newTask);
@@ -31,15 +33,18 @@ class TasksRepository implements ITasksRepository {
     title,
     class_id,
     description,
+    score,
     status
   }: IUpdateTaskDTO): Promise<Task> {
     const updatedTask = new Task({ title,
       class_id,
       description,
+      score,
       status });
     await connection<Task>("tasks").where({id}).update({ title,
       class_id,
       description,
+      score,
       status });
 
     updatedTask.id = id;

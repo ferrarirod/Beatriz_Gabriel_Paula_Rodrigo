@@ -6,5 +6,6 @@ export interface Task {
     title:string;
     class_id: Class,
     description:string,
+    score:number;
     status:boolean,
 }

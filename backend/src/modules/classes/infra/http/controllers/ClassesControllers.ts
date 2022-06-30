@@ -48,6 +48,7 @@ class ClassesController {
     return response.json(updatedClass);
   }
   public async delete(request: Request, response: Response): Promise<Response> {
+    console.log('delete from controller')
     const id = request.params.id;
     const deleteClassService = container.resolve(DeleteClassService);
     const deletedClass = await deleteClassService.execute({id});

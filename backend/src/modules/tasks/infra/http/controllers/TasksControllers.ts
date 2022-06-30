@@ -8,13 +8,14 @@ import { container } from "tsyringe";
 
 class TasksController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { title, class_id, description, status } = request.body;
+    const { title, class_id, description,score, status } = request.body;
     const createTaskService = container.resolve(CreateTaskService);
 
     const newTask = await createTaskService.execute({
         title,
         class_id,
         description,
+        score,
         status
     });
 
@@ -32,7 +33,7 @@ class TasksController {
     return response.json(selectedTask);
   }
   public async update(request: Request, response: Response): Promise<Response> {
-    const { title, class_id, description, status } = request.body;
+    const { title, class_id, description,score, status } = request.body;
     const {id} = request.params;
     const updateTaskService = container.resolve(UpdateTaskService);
     const updatedTask = await updateTaskService.execute({
@@ -40,6 +41,7 @@ class TasksController {
       title,
       class_id,
       description,
+      score,
       status
     });
     return response.json(updatedTask);

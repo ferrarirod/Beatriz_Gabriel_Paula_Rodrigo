@@ -12,18 +12,22 @@ import {  SubmitHandler, useForm } from "react-hook-form";
 import { FormDrawer } from "../../components/Form";
 import { InputForm } from "../../components/Input";
 import { SelectForm } from "../../components/Select";
-import { Table, Row, Space, Drawer, Button, Form, Input, } from 'antd';
+import { Table, Row, Space, Drawer, Button, Form, Input, Radio, Card,List } from 'antd';
+import type { RadioChangeEvent } from 'antd';
+
 import type { ColumnsType } from 'antd/lib/table';
 import './styles.css';
 import { api } from '../../services/api';
 
+const sampleIMG = require("../../assets/sample.png");
 
 interface FormTask {
     id: string;
     title: string;
     class_id: string;
     description: string;
-    status:boolean;
+    status?:boolean;
+    score:number;
   }
   
 
@@ -32,6 +36,43 @@ interface ClassOption{
     value: string; 
 }
 
+const options = [
+  [
+    {
+      title: 'A',
+      content: "text node"
+    },
+    {
+      title: 'B',
+      content: "element node"
+  
+    },
+    {
+      title: 'C',
+      content:"comment node"
+    },
+    {
+      title: 'D',
+      content:"Nenhuma opção"
+    },
+  ],
+  [
+    {
+    title: 'A',
+    content: 'p.classList.remove("nav")'
+  },
+  {
+    title: 'B',
+    content: 'p.className = ""'
+
+  },
+  {
+    title: 'C',
+    content:"Ambas as opções"
+  },
+
+  ]
+];
 export function ListTasksPage(){
 
     const [classes, setClasses] = useState<Class[]>();
@@ -41,6 +82,12 @@ export function ListTasksPage(){
     const [visibleShow, setVisibleShow] = useState<boolean>(false);
     const [classOptions, setclassOptions ]= useState<ClassOption[]>();
     const [selectedTask, setSelectedTask ]= useState<Task>();
+    const [value, setValue] = useState(1);
+
+    const onChange = (e: RadioChangeEvent) => {
+      console.log('radio checked', e.target.value);
+      setValue(e.target.value);
+    };
 
 
     const { reset, control, handleSubmit } = useForm({
@@ -50,7 +97,7 @@ export function ListTasksPage(){
         title: "",
         class_id: "",
         description: "",
-        status: false,
+score: 0,
         },
       });
       
@@ -59,7 +106,6 @@ export function ListTasksPage(){
         try {
             const response = await  api.get("tasks");
             setTasks(response.data);
-            console.log('tasks',response.data);
             
         
         }catch(err){
@@ -71,7 +117,6 @@ export function ListTasksPage(){
         try {
             const response = await  api.get("classes");
             setClasses(response.data);
-            console.log('classes',response.data);
             
         
         }catch(err){
@@ -102,9 +147,8 @@ export function ListTasksPage(){
             title: formValue.title,
             class_id: formValue.class_id,
             description: formValue.description,
-            status: formValue.status,
+            score: formValue.score
         }
-        console.log('data to create',data)
 
           api
             .post("/tasks",data)
@@ -116,7 +160,7 @@ export function ListTasksPage(){
                 title: "",
                 class_id: "",
                 description: "",
-                status: false,
+score: 0,
               });
             })
             .catch((err) => {
@@ -128,14 +172,14 @@ export function ListTasksPage(){
 
     const handleUpdateTask: SubmitHandler<FormTask> = useCallback(
         async (formValue) => {
-        
           let data = {
             title: formValue.title,
             class_id: formValue.class_id,
             description: formValue.description,
-            status: formValue.status,
+            score: formValue.score
         }
         console.log('data to update',data)
+
 
             api.put(`tasks/${formValue.id}`, data)
             .then((response) => {
@@ -146,7 +190,7 @@ export function ListTasksPage(){
                 title: "",
                 class_id: "",
                 description: "",
-                status: false,
+                score: 0,
               });
             })
             .catch((err) => {
@@ -215,7 +259,7 @@ export function ListTasksPage(){
                 title: record.title,
                 class_id: record.class_id.id,
                 description: record.description,
-                status: record.status,
+                score:record.score
             });
             setVisibleEdit(true); 
             }
@@ -235,10 +279,10 @@ export function ListTasksPage(){
           render: (text,record)=> <span>{record.description}</span>,
         },
         {
-          title: 'Completa',
-          dataIndex:'description',
-          key:'description',
-          render: (text,record)=> <span>{record.status? "Sim" : "Não"}</span>,
+          title: 'Pontuação',
+          dataIndex:'score',
+          key:'score',
+          render: (text,record)=> <span>{record.score}</span>,
         },
         {
           title: 'Action',
@@ -260,7 +304,7 @@ export function ListTasksPage(){
                    title: _.title,
                    class_id: _.class_id.id,
                    description:  _.description,
-                   status : _.status
+                   score: _.score,
                   });
                editTask(record);
               }}>
@@ -291,17 +335,62 @@ export function ListTasksPage(){
             </Button>  
             </Row><br></br>         
             <Table columns={columns} dataSource={tasks} />
-            <Drawer title={`${selectedTask?.title}`} 
+            <Drawer title={`Tarefa`} 
                 size="large" placement="right" 
                 onClose={onClose} 
                 visible={visibleShow}
                 contentWrapperStyle={{background: 'inkp'}}
-                bodyStyle={{width: "100%", display:'flex', flexDirection:'column', justifyContent:'center'}}
+                bodyStyle={{width: "100%", display:'flex', flexDirection:'column'}}
                 >
                 <h1>{selectedTask?.title}</h1>
-                <i>{selectedTask?.class_id.title}</i>
-                <p>{selectedTask?.description}</p>
-                <p>Tarefa completa:{selectedTask?.status? 'Sim' : 'Não'}</p>
+                <p><b>Aula:</b> {selectedTask?.class_id.title}</p>
+                <p><b>Descrição: </b>{selectedTask?.description}</p>
+                <p><b>Pontuação: </b>{selectedTask?.score}</p>
+                <span><b>Q1. </b>O que document.getElementById("t1").childNodes[0] retorna?</span>
+                  <br/>
+                <List
+                  grid={{ gutter: 16, column: 4 }}
+                  dataSource={options[0]}
+                  renderItem={item => (
+                    <List.Item>
+                      <Card title={item.title}>{item.content}</Card>
+                    </List.Item>
+                  )}
+                />
+                <b>Escolha uma alternativa: </b>
+                <br/>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>A</Radio>
+                  <Radio value={2}>B</Radio>
+                  <Radio value={3}>C</Radio>
+                  <Radio value={4}>D</Radio>
+                </Radio.Group>  
+              <br/>
+              <span><b>Q2. </b>
+Como remover a classe <i>nav</i> do seguinte elemento? Escolha todas as opções possíveis em relação a este exemplo.</span>
+                  <br/>
+                  <img src={sampleIMG} alt="" />
+                <List
+                  grid={{ gutter: 16, column: 4 }}
+                  dataSource={options[1]}
+                  renderItem={item => (
+                    <List.Item>
+                      <Card title={item.title}>{item.content}</Card>
+                    </List.Item>
+                  )}
+                />
+                <b>Escolha uma alternativa: </b>
+                <br/>
+                <Radio.Group onChange={onChange} value={value}>
+                  <Radio value={1}>A</Radio>
+                  <Radio value={2}>B</Radio>
+                  <Radio value={3}>C</Radio>
+                  <Radio value={4}>D</Radio>
+                </Radio.Group>
+                <br/>
+                <Button type="primary">
+                      Enviar
+                </Button>  
             </Drawer>
             <FormDrawer
                 title="Cadastrando Tarefa"
@@ -311,7 +400,7 @@ export function ListTasksPage(){
                       title: "",
                       class_id: "",
                       description: "",
-                      status: false,
+                      score:0,
                       });
                       setVisibleCreate(false)
                 } 
@@ -336,19 +425,12 @@ export function ListTasksPage(){
                 control={control}
                  label="Descrição"
                  />
-               <SelectForm 
+                <InputForm
+                name="score"
                 control={control}
-                name="status"
-                label="Completa"
-                options={ [
-                 { label: "Sim",
-                  value: true},
-                  {
-                    label: "Não",
-                    value: false
-                  }
-                ]}
+                 label="Pontuação"
                  />
+              
                 <Form.Item>
                 <Button htmlType="submit" type="primary">
                     Cadastrar
@@ -360,7 +442,7 @@ export function ListTasksPage(){
                           title: "",
                           class_id: "",
                           description: "",
-                          status: false,
+score: 0,
                         });
                     }}>
                     Limpar
@@ -375,7 +457,7 @@ export function ListTasksPage(){
                       title: "",
                       class_id: "",
                       description: "",
-                      status: false,
+                      score: 0,
                       });
                       setVisibleEdit(false)
                 }}
@@ -401,18 +483,10 @@ export function ListTasksPage(){
                 control={control}
                  label="Descrição"
                  />
-                <SelectForm 
+               <InputForm
+                name="score"
                 control={control}
-                name="status"
-                label="Completa"
-                options={ [
-                 { label: "Sim",
-                  value: true},
-                  {
-                    label: "Não",
-                    value: false
-                  }
-                ]}
+                 label="Pontuação"
                  />
                 <Form.Item>
                 <Button htmlType="submit" type="primary">
