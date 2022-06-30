@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./hooks/auth";
+import { AuthProvider} from "./hooks/auth";
 import { AppRoutes } from "./routes";
 import "./App.css";
 
