@@ -24,11 +24,10 @@ export function LoginPage() {
     if (user) {
       navigate("/");
     }
-  }, [user, navigate ]);
+  }, [user, navigate]);
 
   const handleCreateSession: SubmitHandler<ISessionData> = useCallback(
     async (formValue) => {
-     
       signIn({
         email: formValue.email,
         password: formValue.password,
