@@ -7,9 +7,9 @@ const usersRoutes = Router();
 const usersController = new UsersController();
 const authMiddleware = new AuthMiddleware();
 
+usersRoutes.post("/", usersController.create);
 usersRoutes.use(authMiddleware.isAuthenticate, authMiddleware.isAdmin);
 
-usersRoutes.post("/", usersController.create);
 usersRoutes.get("/:id", usersController.show);
 usersRoutes.get("/", usersController.index);
 usersRoutes.put("/:id", usersController.update);

@@ -3,7 +3,8 @@ import { Layout } from "antd";
 import { SideBar } from "../../components/Sidebar";
 import { useAuth } from "../../hooks/auth";
 import { Navigate } from "react-router-dom";
-const { Header, Content, Footer } = Layout;
+import { HeaderProfile } from "../../components/Header";
+const { Content, Footer } = Layout;
 
 interface PrivateProps {
   children: ReactNode;
@@ -11,13 +12,13 @@ interface PrivateProps {
 
 export function Private({ children }: PrivateProps) {
   const { user } = useAuth();
-  
+
   if (user) {
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <SideBar />
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
+          <HeaderProfile />
           <Content style={{ margin: "0 16px" }}>
             <div
               className="site-layout-background"
@@ -32,6 +33,6 @@ export function Private({ children }: PrivateProps) {
       </Layout>
     );
   }
- 
+
   return <Navigate replace to="/login" />;
 }
