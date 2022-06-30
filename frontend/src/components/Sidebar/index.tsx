@@ -32,6 +32,7 @@ function getItem(
   } as MenuItem;
 }
 
+
 export function SideBar() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const { signOut } = useAuth();
@@ -41,11 +42,12 @@ export function SideBar() {
     getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
     getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
     getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
+    getItem(<Link to="/tasks">Tarefas</Link>, "5", <PlayCircleOutlined />),
     getItem(
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
-      "5",
+      "6",
       <PoweroffOutlined />
     ),
   ];

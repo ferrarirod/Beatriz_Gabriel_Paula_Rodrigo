@@ -1,7 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { ListUsersPage } from "../pages/users";
 import { ListClassesPage } from "../pages/classes";
+import { ViewClass } from "../pages/classes/view";
 import { ListModulesPage } from "../pages/modules";
+import { ListTasksPage } from "../pages/tasks";
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 import { ProfileUserPage } from "../pages/profile";
@@ -51,6 +53,23 @@ function AppRoutes() {
           </Private>
         }
       />
+      <Route
+        path="/tasks"
+        element={
+          <Private>
+            <ListTasksPage />
+          </Private>
+        }
+      />
+      <Route path="/classes/view/:id"   element={
+          <Private>
+            <ViewClass />
+          </Private>
+        }/>
+
+      {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
+      <Route path="/users" element={<h1>Users</h1>} />
+      <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
     </Routes>
   );
 }
