@@ -52,6 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const user = localStorage.getItem("@WebMasters:user");
 
     if (user && token) {
+      api.defaults.headers.common["authorization"] = `Bearer ${token}`;
       return {
         user: JSON.parse(user),
       };

@@ -7,11 +7,11 @@ const usersRoutes = Router();
 const usersController = new UsersController();
 const authMiddleware = new AuthMiddleware();
 
-usersRoutes.post("/", usersController.create);
 usersRoutes.use(authMiddleware.isAuthenticate, authMiddleware.isAdmin);
 
-usersRoutes.get("/:id", usersController.show);
+usersRoutes.post("/", usersController.create);
 usersRoutes.get("/", usersController.index);
+usersRoutes.get("/:id", usersController.show);
 usersRoutes.put("/:id", usersController.update);
 usersRoutes.delete("/:id", usersController.delete);
 
