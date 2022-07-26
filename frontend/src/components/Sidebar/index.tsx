@@ -5,8 +5,11 @@ import {
   DashboardFilled,
   PlayCircleOutlined,
   UserOutlined,
+  PoweroffOutlined,
+  CheckSquareOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/auth";
 
 const Logo = require("../../assets/webmaster-bg-full.png");
 
@@ -30,18 +33,25 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
-  getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
-  getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
-  getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
-  getItem(<Link to="/tasks">Tarefas</Link>, "", <PlayCircleOutlined />),
-
-];
 
 export function SideBar() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
+  const { signOut } = useAuth();
 
+  const items: MenuItem[] = [
+    getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
+    getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
+    getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
+    getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
+    getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
+    getItem(
+      <Link to="/login" onClick={signOut}>
+        Sair
+      </Link>,
+      "6",
+      <PoweroffOutlined />
+    ),
+  ];
   return (
     <Sider
       collapsible

@@ -3,10 +3,12 @@ import { ListUsersPage } from "../pages/users";
 import { ListClassesPage } from "../pages/classes";
 import { ViewClass } from "../pages/classes/view";
 import { ListModulesPage } from "../pages/modules";
+import { ListCommentsPage } from "../pages/comments";
 import { ListTasksPage } from "../pages/tasks";
 
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
+import { ProfileUserPage } from "../pages/profile";
 
 function AppRoutes() {
   return (
@@ -42,6 +44,24 @@ function AppRoutes() {
         element={
           <Private>
             <ListClassesPage />
+          </Private>
+        }
+      />
+
+
+      <Route
+        path="/comments"
+        element={
+          <Private>
+            <ListModulesPage />
+          </Private>
+        }
+      />
+     <Route
+        path="/profile"
+        element={
+          <Private>
+            <ProfileUserPage />
           </Private>
         }
       />

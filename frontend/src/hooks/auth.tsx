@@ -31,6 +31,7 @@ interface AuthContextProps {
   user: User;
   updateContext: (user: User) => void;
   signIn: (data: ISignIn) => Promise<void>;
+  signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -51,6 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const user = localStorage.getItem("@WebMasters:user");
 
     if (user && token) {
+      api.defaults.headers.common["authorization"] = `Bearer ${token}`;
       return {
         user: JSON.parse(user),
       };
@@ -67,7 +69,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signIn = useCallback(
     async ({ email, password }: ISignIn) => {
-      
       api
         .post("/sessions", {
           email,
@@ -75,7 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         })
         .then((response) => {
           const { user, token } = response.data;
-        
+
           localStorage.setItem("@WebMasters:user", JSON.stringify(user));
           localStorage.setItem("@WebMasters:token", token);
           api.defaults.headers.common["authorization"] = `Bearer ${token}`;
@@ -88,12 +89,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [updateContext]
   );
 
+  const signOut = useCallback(() => {
+    setData({} as AuthState);
+    localStorage.clear();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
         user: data.user,
         updateContext,
         signIn,
+        signOut,
       }}>
       {children}
     </AuthContext.Provider>
