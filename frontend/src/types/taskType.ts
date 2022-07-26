@@ -1,5 +1,6 @@
 
 import { Class } from './classType';
+import { Question } from './questionType';
 
 export interface Task {
     id:string;
@@ -8,4 +9,5 @@ export interface Task {
     description:string,
     score:number;
     status:boolean,
+    questions?: Question[]
 }

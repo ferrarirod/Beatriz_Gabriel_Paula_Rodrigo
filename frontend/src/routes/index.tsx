@@ -4,6 +4,7 @@ import { ListClassesPage } from "../pages/classes";
 import { ViewClass } from "../pages/classes/view";
 import { ListModulesPage } from "../pages/modules";
 import { ListTasksPage } from "../pages/tasks";
+
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 
@@ -52,6 +53,7 @@ function AppRoutes() {
           </Private>
         }
       />
+
       <Route path="/classes/view/:id"   element={
           <Private>
             <ViewClass />

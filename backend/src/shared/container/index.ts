@@ -10,6 +10,13 @@ import { ModuleRepository } from "@modules/modules/infra/knex/repositories/Modul
 import { IModulesRepository } from "@modules/modules/repositories/IModulesRepository";
 import { TasksRepository } from "@modules/tasks/infra/knex/repositories/TasksRepository";
 import { ITasksRepository } from "@modules/tasks/repositories/ITasksRepository";
+import { QuestionsRepository } from "@modules/questions/infra/knex/repositories/QuestionsRepository";
+import { IQuestionsRepository } from "@modules/questions/repositories/IQuestionsRepository";
+import { OptionsRepository } from "@modules/options/infra/knex/repositories/OptionsRepository";
+import { IOptionsRepository } from "@modules/options/repositories/IOptionsRepository";
+
+
+
 
 
 container.registerSingleton<IUsersRepository>(
@@ -29,3 +36,14 @@ container.registerSingleton<ITasksRepository>(
   "TasksRepository",
   TasksRepository
 );
+
+container.registerSingleton<IQuestionsRepository>(
+  "QuestionsRepository",
+  QuestionsRepository
+);
+
+container.registerSingleton<IOptionsRepository>(
+  "OptionsRepository",
+  OptionsRepository
+);
+
