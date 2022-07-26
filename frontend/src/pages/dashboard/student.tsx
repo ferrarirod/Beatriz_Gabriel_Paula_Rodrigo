@@ -3,10 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 import { Card } from "../../components/Card";
 import { ListItemLink } from "../../components/ListItemLink";
 import { api } from "../../services/api";
+import { sortByCreatedAt } from "../../utils/sort";
 
 interface Module {
   id: string;
   name: string;
+  created_at: Date
 }
 
 interface Task {
@@ -58,7 +60,7 @@ export function DashboardStudent() {
               }}
             >
               <h3 style={{ fontWeight: "bold" }}>Módulos</h3>
-              {modules.map((module) => (
+              {sortByCreatedAt(modules).map((module: Module) => (
                 <ListItemLink
                   key={module.id}
                   title={module.name}
@@ -78,7 +80,7 @@ export function DashboardStudent() {
               }}
             >
               <h3>Tarefas</h3>
-              {tasks.map((task) => (
+              {sortByCreatedAt(tasks).map((task) => (
                 <ListItemLink
                   key={task.id}
                   title={task.title}

@@ -54,6 +54,7 @@ class FinishedClassesRepository implements IFinishedClassesRepository {
     const finishedClasses = await connection<FinishedClass>("finished_classes")
       .where({
         user_id,
+        class_id
       })
       .select()
       .limit(1);

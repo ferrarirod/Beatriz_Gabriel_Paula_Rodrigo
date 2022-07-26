@@ -24,7 +24,7 @@ function AppRoutes() {
         path="/"
         element={
           <Private>
-            {user.type === 1 ? <DashboardAdmin /> : <DashboardStudent />}
+            {user && user.type === 0 ? <DashboardAdmin /> : <DashboardStudent />}
           </Private>
         }
       />

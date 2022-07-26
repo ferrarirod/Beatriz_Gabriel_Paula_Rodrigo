@@ -16,20 +16,17 @@ class CreateFinishedClassesService {
         user_id,
         class_id,
       });
-
     if (existFinisehdClassByUser) {
       throw new AppError("Class already finished.", 400);
     }
 
-
     const finishedClass = await this.finishedClassesRepository.create({
       user_id,
-      class_id
-    })
+      class_id,
+    });
 
-    return finishedClass
+    return finishedClass;
   }
 }
 
-
-export { CreateFinishedClassesService }
+export { CreateFinishedClassesService };
