@@ -21,6 +21,9 @@ class CreateFinishedClassesService {
       throw new AppError("Class already finished.", 400);
     }
 
-    
+
   }
 }
+
+
+export { CreateFinishedClassesService }

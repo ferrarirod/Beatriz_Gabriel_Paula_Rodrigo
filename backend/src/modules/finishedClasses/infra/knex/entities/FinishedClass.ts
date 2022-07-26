@@ -1,7 +1,7 @@
 import { ICreateFinishedClassesDTO } from "@modules/finishedClasses/dtos/ICreateFinishedClassesDTO";
 import { v4 as uuid } from "uuid";
 
-class FinisedClass {
+class FinishedClass {
   id: string;
 
   user_id: string;
@@ -21,4 +21,4 @@ class FinisedClass {
   }
 }
 
-export { FinisedClass };
+export { FinishedClass };

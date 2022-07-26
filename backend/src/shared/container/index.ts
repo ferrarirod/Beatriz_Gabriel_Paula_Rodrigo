@@ -12,6 +12,8 @@ import { CommentRepository } from "@modules/comments/infra/knex/repositories/Com
 import { ICommentsRepository } from "@modules/comments/repositories/ICommentsRepository";
 import { TasksRepository } from "@modules/tasks/infra/knex/repositories/TasksRepository";
 import { ITasksRepository } from "@modules/tasks/repositories/ITasksRepository";
+import { IFinishedClassesRepository } from "@modules/finishedClasses/repositories/IFinishedClassesRepository";
+import { FinishedClassesRepository } from "@modules/finishedClasses/infra/knex/repositories/FinishedClassesRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -33,4 +35,9 @@ container.registerSingleton<ICommentsRepository>(
 container.registerSingleton<ITasksRepository>(
   "TasksRepository",
   TasksRepository
+);
+
+container.registerSingleton<IFinishedClassesRepository>(
+  "FinishedClassesRepository",
+  FinishedClassesRepository
 );
