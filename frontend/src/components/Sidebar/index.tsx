@@ -39,15 +39,15 @@ export function SideBar() {
 
   const items: MenuItem[] = [
     getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
-    getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
   ];
-
+  
   if (user.type === 0) {
     items.push(
       ...[
         getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
         getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
         getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
+        getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
       ]
     );
   }
