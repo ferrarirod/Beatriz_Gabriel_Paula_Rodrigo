@@ -17,6 +17,7 @@ finishedClassesRoutes.use(authMiddleware.isAuthenticate);
 finishedClassesRoutes.post("/", finishedClassesController.create);
 
 finishedClassesRoutes.get("/:user_id", finishedClassesUserController.index);
+finishedClassesRoutes.get("/count/:user_id", finishedClassesUserController.count);
 
 finishedClassesRoutes.get("/class/:class_id", finishedClassesClassController.show);
 
