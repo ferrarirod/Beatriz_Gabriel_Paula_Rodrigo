@@ -7,6 +7,8 @@ interface IFinishedClassesRepository {
     data: ICreateFinishedClassesDTO
   ): Promise<FinishedClass | undefined>;
   findByUser(data: IListFinishedClassesByUserDTO): Promise<FinishedClass[]>;
+  create(data: ICreateFinishedClassesDTO): Promise<FinishedClass>;
+  finByClassId(class_id: string): Promise<FinishedClass | undefined>;
 }
 
 export { IFinishedClassesRepository };

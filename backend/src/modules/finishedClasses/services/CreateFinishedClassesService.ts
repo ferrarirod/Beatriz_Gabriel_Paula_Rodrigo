@@ -22,6 +22,12 @@ class CreateFinishedClassesService {
     }
 
 
+    const finishedClass = await this.finishedClassesRepository.create({
+      user_id,
+      class_id
+    })
+
+    return finishedClass
   }
 }
 

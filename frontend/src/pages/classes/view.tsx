@@ -1,10 +1,20 @@
-import { Comment, List, Tooltip, Button, Form, Input, Col } from "antd";
+import {
+  Comment,
+  List,
+  Tooltip,
+  Button,
+  Form,
+  Input,
+  Col,
+  message,
+} from "antd";
 import { api } from "../../services/api";
 import { useParams } from "react-router-dom";
 import { Class } from "../../types/classType";
 import { useEffect, useState, useCallback } from "react";
 
 import moment from "moment";
+import { useAuth } from "../../hooks/auth";
 
 const { TextArea } = Input;
 
@@ -65,22 +75,44 @@ const formatUrl = (url: string | undefined) => {
 
 export function ViewClass() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [selectedClass, setSelectedClass] = useState<Class>();
+  const [finished, setFinished] = useState<boolean>(true);
 
   async function getClass(id: string | undefined) {
     try {
       const response = await api.get("classes/" + id);
       let data = response.data;
-      //data.module= response.data.module.name;
-      console.log("class", data[0]);
 
       setSelectedClass(data[0]);
 
-      console.log(selectedClass);
+      api
+        .get(`/finishedClasses/class/${id}`)
+        .then((response) => {
+          setFinished(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log("erro", JSON.stringify(err));
     }
   }
+
+  const markAsFinished = useCallback(async () => {
+    api
+      .post("/finishedClasses", {
+        user_id: user.id,
+        class_id: id,
+      })
+      .then((response) => {
+        setFinished(true)
+        message.success("Aula finalizada com sucesso");
+      })
+      .catch((err) => {
+        message.error("Não foi possível finalizar a aula");
+      });
+  }, [user.id, id]);
 
   useEffect(() => {
     getClass(id);
@@ -93,7 +125,11 @@ export function ViewClass() {
     >
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>Aula: {selectedClass?.title}</h2>
-        <Button type="primary" >Marcar como concluída</Button>
+        {!finished && (
+          <Button type="primary" onClick={markAsFinished}>
+            Marcar como concluída
+          </Button>
+        )}
       </div>
       <h1>
         <b>Módulo:</b> {selectedClass?.module.name}
