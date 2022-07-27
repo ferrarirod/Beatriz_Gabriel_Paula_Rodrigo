@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Comment } from "../../types/commentType";
+import { Class } from "../../types/classType";
+import { User } from "../../types/userType";
 import { Table, Space, Drawer, Button, Form, Row, } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { FormDrawer } from "../../components/Form";
-import { InputForm } from "../../components/Input";
+import { InputForm } from "../../components/Input"
+import { SelectForm } from "../../components/Select";
+
 import { api } from '../../services/api';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
@@ -14,6 +18,15 @@ interface FormComment {
     class_id: string;
     content: string;
     is_anonymous: boolean;
+}
+
+interface ClassOption {
+    label: string;
+    value: string;
+}
+interface UserOption {
+    label: string;
+    value: string;
 }
 
 export function ListCommentsPage() {
@@ -29,10 +42,15 @@ export function ListCommentsPage() {
     });
 
     const [comments, setComments] = useState<Comment[]>();
+    const [classes, setClasses] = useState<Class[]>();
+    const [users, setUsers] = useState<User[]>();
     const [showing, setShowing] = useState(false);
     const [selectedComment, setSelectedComment] = useState<Comment>();
     const [visibleCreate, setVisibleCreate] = useState<boolean>(false);
     const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+    const [classOptions, setClassOptions] = useState<ClassOption[]>();
+    const [userOptions, setUserOptions] = useState<ClassOption[]>();
+
 
     const handleComments = useCallback(() => {
         api
@@ -45,8 +63,54 @@ export function ListCommentsPage() {
             });
     }, []);
 
+
+    useEffect(() => {
+        let classOptions = [] as ClassOption[];
+
+        classes?.map((uniqueClass) => {
+            const classOption = {
+                label: uniqueClass.title,
+                value: uniqueClass.id
+            };
+            classOptions.push(classOption);
+        })
+        setClassOptions(classOptions);
+    }, [classes]);
+    async function getClasses() {
+        try {
+            const response = await api.get("classes");
+            setClasses(response.data);
+        } catch (err) {
+            console.log('erro', JSON.stringify(err));
+        };
+    }
+
+    useEffect(() => {
+        let userOptions = [] as UserOption[];
+
+        users?.map((user) => {
+            const userOption = {
+                label: user.name,
+                value: user.id
+            };
+            userOptions.push(userOption);
+        })
+        setUserOptions(userOptions);
+    }, [users]);
+    async function getUsers() {
+        try {
+            const response = await api.get("users");
+            setUsers(response.data);
+        } catch (err) {
+            console.log('erro', JSON.stringify(err));
+        };
+    }
+
+
     useEffect(() => {
         handleComments();
+        getClasses();
+        getUsers();
     }, [handleComments]);
 
 
@@ -73,6 +137,7 @@ export function ListCommentsPage() {
 
     const handleCreateComment: SubmitHandler<FormComment> = useCallback(
         async (formValue) => {
+            console.log(formValue)
             api
                 .post("/comments", {
                     user_id: formValue.user_id,
@@ -202,7 +267,7 @@ export function ListCommentsPage() {
     return (
         <>
             <Row justify="space-between">
-                <h1>Lista de Módulos</h1>
+                <h1>Lista de Comentários</h1>
                 <Button
                     type="primary"
                     onClick={() => {
@@ -213,13 +278,14 @@ export function ListCommentsPage() {
             </Row>
             <Table columns={columns} dataSource={comments} />
             <FormDrawer
-                title="Cadastrando Módulo"
+                title="Cadastrando Comentários"
                 onClose={() => {
                     setVisibleCreate(false);
                 }}
                 visible={visibleCreate}
                 onSubmit={handleSubmit(handleCreateComment)}>
-                <InputForm label="Aula" control={control} name="class_id" />
+                <SelectForm label="Aula" control={control} name="class_id" options={classOptions || [{ label: "Não há aulas", value: 0 }]} />
+                <SelectForm label="Usuário" control={control} name="user_id" options={userOptions || [{ label: "Não há usuários", value: 0 }]} />
                 <InputForm label="Comentário" control={control} name="content" />
                 <Form.Item>
                     <Space>
@@ -240,13 +306,12 @@ export function ListCommentsPage() {
                     </Space>
                 </Form.Item>
             </FormDrawer>
-            <Drawer title={`${selectedComment?.create_date}`} placement="right" onClose={onClose} visible={showing}>
-                <h1>{selectedComment?.class_id}</h1>
+            <Drawer title={`${selectedComment?.created_at}`} placement="right" onClose={onClose} visible={showing}>
                 <p>{selectedComment?.content}</p>
             </Drawer>
 
             <FormDrawer
-                title="Editando Módulo"
+                title="Editando Comentário"
                 onClose={() => {
                     setVisibleEdit(false);
                     reset({
@@ -259,9 +324,10 @@ export function ListCommentsPage() {
                 }}
                 visible={visibleEdit}
                 onSubmit={handleSubmit(handleUpdateComment)}>
-                <InputForm label="Aula" control={control} name="class_id" />
+                <SelectForm label="Aula" control={control} name="class_id" options={classOptions || [{ label: "Não há aulas", value: 0 }]} />
+                <SelectForm label="Usuário" control={control} name="user_id" options={userOptions || [{ label: "Não há usuários", value: 0 }]} />
                 <InputForm label="Comentário" control={control} name="content" />
-                <InputForm label="Comentário Anônimo" control={control} name="is_anonymous" />
+                {/* <InputForm label="Comentário Anônimo" control={control} name="is_anonymous" /> */}
                 <InputForm hidden label="" control={control} name="user_id" />
                 <InputForm hidden label="" control={control} name="id" />
 

@@ -8,6 +8,7 @@ import { ListTasksPage } from "../pages/tasks";
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 import { ProfileUserPage } from "../pages/profile";
+import { ViewQuestion } from "../pages/questions/view";
 
 function AppRoutes() {
   return (
@@ -52,11 +53,11 @@ function AppRoutes() {
         path="/comments"
         element={
           <Private>
-            <ListModulesPage />
+            <ListCommentsPage />
           </Private>
         }
       />
-     <Route
+      <Route
         path="/profile"
         element={
           <Private>
@@ -72,16 +73,22 @@ function AppRoutes() {
           </Private>
         }
       />
-      <Route path="/classes/view/:id"   element={
-          <Private>
-            <ViewClass />
-          </Private>
-        }/>
+      <Route path="/classes/view/:id" element={
+        <Private>
+          <ViewClass />
+        </Private>
+      } />
+      <Route path="/questions/view" element={
+        <Private>
+          <ViewQuestion />
+        </Private>
+      } />
 
       {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
     </Routes>
+
   );
 }
 
