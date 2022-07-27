@@ -9,18 +9,20 @@ class CreateManyTasksQuestionsService {
     private tasksQuestionsRepository: ITasksQuestionsRepository
   ) {}
 
-  public async execute({ task_id, questions_id }:ICreateManyTasksQuestionsDTO) {
+  public async execute({
+    task_id,
+    questions_id,
+  }: ICreateManyTasksQuestionsDTO) {
+    await this.tasksQuestionsRepository.deleteByTask(task_id);
+    const tasksQuestions = [];
 
-    const tasksQuestions = []
+    for (var i = 0; i < questions_id.length; i++) {
+      let taskQuestion = await this.tasksQuestionsRepository.create({
+        task_id,
+        question_id: questions_id[i],
+      });
 
-    for(var i = 0; i < questions_id.length; i++){
-
-        let taskQuestion = await this.tasksQuestionsRepository.create({
-            task_id,
-            question_id: questions_id[i]
-        });
-
-        tasksQuestions.push(taskQuestion);
+      tasksQuestions.push(taskQuestion);
     }
 
     return tasksQuestions;

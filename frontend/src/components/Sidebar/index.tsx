@@ -7,6 +7,7 @@ import {
   UserOutlined,
   PoweroffOutlined,
   CheckSquareOutlined,
+  QuestionOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
@@ -48,7 +49,7 @@ export function SideBar() {
         getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
         getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
         getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
-        getItem(<Link to="/questions">Questões</Link>, "6", <CheckSquareOutlined />),
+        getItem(<Link to="/questions">Questões</Link>, "6", <QuestionOutlined />),
       ]
     );
   }
