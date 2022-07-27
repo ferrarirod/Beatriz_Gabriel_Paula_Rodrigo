@@ -19,6 +19,8 @@ import { IOptionsRepository } from "@modules/options/repositories/IOptionsReposi
 
 
 
+import { IFinishedClassesRepository } from "@modules/finishedClasses/repositories/IFinishedClassesRepository";
+import { FinishedClassesRepository } from "@modules/finishedClasses/infra/knex/repositories/FinishedClassesRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -52,3 +54,7 @@ container.registerSingleton<IOptionsRepository>(
   OptionsRepository
 );
 
+container.registerSingleton<IFinishedClassesRepository>(
+  "FinishedClassesRepository",
+  FinishedClassesRepository
+);

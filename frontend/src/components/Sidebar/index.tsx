@@ -33,31 +33,41 @@ function getItem(
   } as MenuItem;
 }
 
-
 export function SideBar() {
   const [collapsed, setCollapsed] = useState<boolean>(false);
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   const items: MenuItem[] = [
     getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
-    getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
-    getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
-    getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
-    getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
-    getItem(<Link to="/questions">Questões</Link>, "6", <CheckSquareOutlined />),
+  ];
+  
+  if (user.type === 0) {
+    items.push(
+      ...[
+        getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
+        getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
+        getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
+        getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
+        getItem(<Link to="/questions">Questões</Link>, "6", <CheckSquareOutlined />),
+      ]
+    );
+  }
+
+  items.push(
     getItem(
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
       "7",
       <PoweroffOutlined />
-    ),
-  ];
+    )
+  );
   return (
     <Sider
       collapsible
       collapsed={collapsed}
-      onCollapse={(value) => setCollapsed(value)}>
+      onCollapse={(value) => setCollapsed(value)}
+    >
       <img
         className="logo"
         src={Logo}

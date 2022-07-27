@@ -9,16 +9,24 @@ import { connection } from "@shared/infra/knex";
 import { CreateClassService } from "@modules/classes/services/CreateClassService";
 
 class ClassesRepository implements IClassesRepository {
+  public async findByModule(module_id: string): Promise<Class[]> {
+    const classes = await connection<Class>("classes")
+      .where({
+        module: module_id,
+      })
+      .select();
+
+    return classes;
+  }
 
   public async create({
     title,
     module,
     content,
     link,
-    score
+    score,
   }: ICreateClassDTO): Promise<Class> {
-    
-    const newClass = new Class({ title, module, content, link , score});
+    const newClass = new Class({ title, module, content, link, score });
 
     await connection<Class>("classes").insert(newClass);
 
@@ -30,54 +38,57 @@ class ClassesRepository implements IClassesRepository {
     module,
     content,
     link,
-    score
+    score,
   }: IUpdateClassDTO): Promise<Class> {
-    console.log(id, title,module,content,link,score)
-    console.log('calling update from repository,  id received: ', id);
+    console.log(id, title, module, content, link, score);
+    console.log("calling update from repository,  id received: ", id);
     const updatedClass = new Class({ title, module, content, link, score });
-    const query = connection<Class>("classes").where({id}).update({ title, module, content, link, score });
-    console.log(query.toSQL().toNative())
-    await  query;
+    const query = connection<Class>("classes")
+      .where({ id })
+      .update({ title, module, content, link, score });
+    console.log(query.toSQL().toNative());
+    await query;
     return updatedClass;
   }
-  public async show({
-    id
-  }: IShowClassDTO) :Promise<Class[]>{
+  public async show({ id }: IShowClassDTO): Promise<Class[]> {
     const selectedClass = [] as Class[];
-    const result = await connection<Class>("classes").where('classes.id', '=' , id)
-                                                      .select('classes.*','modules.id','modules.name','modules.description')
-                                                      .join('modules', 'classes.module', '=', 'modules.id')
-                                                      .options({nestTables: true});
-                                                      const allClasses = [] as Class[];
-    result.map( ({classes,modules}) =>{
-      const aClass = new Class(classes)
+    const result = await connection<Class>("classes")
+      .where("classes.id", "=", id)
+      .select("classes.*", "modules.id", "modules.name", "modules.description")
+      .join("modules", "classes.module", "=", "modules.id")
+      .options({ nestTables: true });
+    const allClasses = [] as Class[];
+    result.map(({ classes, modules }) => {
+      const aClass = new Class(classes);
       aClass.module = modules;
       aClass.id = classes.id;
       selectedClass.push(aClass);
-    })
+    });
     return selectedClass;
-
   }
-  public async delete({
-    id
-  }: IDeleteClassDTO) :Promise<Class[]>{
-    const deletedClass = await connection<Class>("classes").where('id', '=' , id);
-    await connection<Class>("classes").where('id', '=' , id).del();
+  public async delete({ id }: IDeleteClassDTO): Promise<Class[]> {
+    const deletedClass = await connection<Class>("classes").where(
+      "id",
+      "=",
+      id
+    );
+    await connection<Class>("classes").where("id", "=", id).del();
     return deletedClass;
   }
-  
-  public async index(): Promise<Class[]>{
-    const result = await connection<Class>("classes").select('classes.*','modules.id','modules.name','modules.description').
-                                                      join('modules', 'classes.module', '=', 'modules.id')
-                                                      .options({nestTables: true})
-                                                      
+
+  public async index(): Promise<Class[]> {
+    const result = await connection<Class>("classes")
+      .select("classes.*", "modules.id", "modules.name", "modules.description")
+      .join("modules", "classes.module", "=", "modules.id")
+      .options({ nestTables: true });
+
     const allClasses = [] as Class[];
-    result.map( ({classes,modules}) =>{
-      const aClass = new Class(classes)
+    result.map(({ classes, modules }) => {
+      const aClass = new Class(classes);
       aClass.module = modules;
       aClass.id = classes.id;
       allClasses.push(aClass);
-    })
+    });
     return allClasses;
   }
 }
