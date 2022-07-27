@@ -16,6 +16,7 @@ import { DashboardAdmin } from "../pages/dashboard/admin";
 import { ListClassesByModule } from "../pages/classes/indexByModule";
 import { PrivateForm } from "../templates/PrivateForm";
 import { ShowTask } from "../pages/tasks/show";
+import { CreateTasksQuestionsPage } from "../pages/tasks/questions";
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -26,7 +27,11 @@ function AppRoutes() {
         path="/"
         element={
           <Private>
-            {user && user.type === 0 ? <DashboardAdmin /> : <DashboardStudent />}
+            {user && user.type === 0 ? (
+              <DashboardAdmin />
+            ) : (
+              <DashboardStudent />
+            )}
           </Private>
         }
       />
@@ -103,6 +108,15 @@ function AppRoutes() {
         element={
           <Private>
             <ViewClass />
+          </Private>
+        }
+      />
+
+      <Route
+        path="/tasks/questions/:id"
+        element={
+          <Private>
+            <CreateTasksQuestionsPage />
           </Private>
         }
       />

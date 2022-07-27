@@ -21,6 +21,8 @@ import { IOptionsRepository } from "@modules/options/repositories/IOptionsReposi
 
 import { IFinishedClassesRepository } from "@modules/finishedClasses/repositories/IFinishedClassesRepository";
 import { FinishedClassesRepository } from "@modules/finishedClasses/infra/knex/repositories/FinishedClassesRepository";
+import { ITasksQuestionsRepository } from "@modules/tasksQuestions/repositories/ITasksQuestionsRepository";
+import { TasksQuestionsRepository } from "@modules/tasksQuestions/infra/knex/repositories/TasksQuestionsRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -57,4 +59,9 @@ container.registerSingleton<IOptionsRepository>(
 container.registerSingleton<IFinishedClassesRepository>(
   "FinishedClassesRepository",
   FinishedClassesRepository
+);
+
+container.registerSingleton<ITasksQuestionsRepository>(
+  "TasksQuestionsRepository",
+  TasksQuestionsRepository
 );

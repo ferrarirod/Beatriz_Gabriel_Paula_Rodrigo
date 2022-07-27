@@ -10,6 +10,7 @@ import { questionsRoutes } from "@modules/questions/infra/http/routes/questions.
 import { optionsRoutes } from "@modules/options/infra/http/routes/options.routes";
 
 import { finishedClassesRoutes } from "@modules/finishedClasses/infra/http/routes/finishedClasses.routes";
+import { tasksQuestionsRoutes } from "@modules/tasksQuestions/infra/http/routes/tasksQuestions.routes";
 
 
 
@@ -23,8 +24,7 @@ routes.use("/comments", commentsRoutes);
 routes.use("/tasks", tasksRoutes);
 routes.use("/questions", questionsRoutes);
 routes.use("/options", optionsRoutes);
-
-
+routes.use("/tasksQuestions", tasksQuestionsRoutes);
 routes.use("/finishedClasses", finishedClassesRoutes);
 
 
