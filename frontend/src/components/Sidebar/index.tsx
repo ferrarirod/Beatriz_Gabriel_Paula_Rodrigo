@@ -7,6 +7,7 @@ import {
   UserOutlined,
   PoweroffOutlined,
   CheckSquareOutlined,
+  OrderedListOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
@@ -41,14 +42,15 @@ export function SideBar() {
   const items: MenuItem[] = [
     getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
     getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
-    getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
-    getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
-    getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
+    getItem(<Link to="/leaderboard">Classificação</Link>, "3", <OrderedListOutlined />),
+    getItem(<Link to="/modules">Modulos</Link>, "4", <BookOutlined />),
+    getItem(<Link to="/classes">Aulas</Link>, "5", <PlayCircleOutlined />),
+    getItem(<Link to="/tasks">Tarefas</Link>, "6", <CheckSquareOutlined />),
     getItem(
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
-      "6",
+      "7",
       <PoweroffOutlined />
     ),
   ];
