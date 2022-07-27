@@ -11,7 +11,6 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("cascade")
       .onUpdate("cascade");
     table.string("name").notNullable();
-    table.text("description").notNullable();
     table.dateTime("created_at").notNullable();
     table.dateTime("updated_at").notNullable();
   });

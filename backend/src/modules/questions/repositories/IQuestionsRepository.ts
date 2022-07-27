@@ -5,6 +5,7 @@ import { IShowQuestionDTO } from "@modules/questions/dtos/IShowQuestionDTO";
 
 
 import { Question } from "../infra/knex/entities/Question";
+import { IUpdateExpectedAnswerQuestionDTO } from "../dtos/IUpdateExpectedAnswerQuestionDTO";
 
 export interface IQuestionsRepository {
   create(data: ICreateQuestionDTO ): Promise<Question>;
@@ -12,4 +13,5 @@ export interface IQuestionsRepository {
   delete(data: IDeleteQuestionDTO) : Promise<Question[]>;
   show(data: IShowQuestionDTO) : Promise<Question[]>;
   index() : Promise<Question[]>;
+  updateExepectedAnswer(data: IUpdateExpectedAnswerQuestionDTO):Promise<Question>;
 }

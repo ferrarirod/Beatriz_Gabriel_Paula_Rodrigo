@@ -5,18 +5,19 @@ class Option {
 
   name: string;
 
-  description: string;
+  question_id: string;
+
 
   created_at?: Date;
 
   updated_at?: Date;
 
-  constructor({ name, description }: ICreateOptionDTO) {
+  constructor({ name, question_id }: ICreateOptionDTO) {
     this.id = uuid();
     this.created_at = new Date();
     this.updated_at = new Date();
     this.name = name;
-    this.description = description;
+    this.question_id = question_id;
   }
 }
 

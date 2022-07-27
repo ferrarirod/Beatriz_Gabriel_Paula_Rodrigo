@@ -10,15 +10,13 @@ import { container } from "tsyringe";
 
 class OptionsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, description, question_id, chalenge_id } = request.body;
+    const { name, question_id } = request.body;
 
     const createOptionService = container.resolve(CreateOptionService);
 
     const option = await createOptionService.execute({
       name,
-      description,
       question_id,
-      chalenge_id
     });
 
     return response.json(option);
@@ -36,14 +34,14 @@ class OptionsController {
     return response.json(selectedOption);
   }
   public async update(request: Request, response: Response): Promise<Response> {
-    const { name, description } = request.body;
+    const { name, question_id } = request.body;
     const id = request.params.id;
 
     const updateOptionService = container.resolve(UpdateOptionService);
     const updatedOption = await updateOptionService.execute({
       id,
       name,
-      description,
+      question_id
     });
 
     return response.json(updatedOption);

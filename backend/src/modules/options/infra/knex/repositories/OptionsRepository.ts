@@ -5,7 +5,6 @@ import { IShowOptionDTO } from "@modules/options/dtos/IShowOptionDTO";
 
 import { IOptionsRepository } from "@modules/options/repositories/IOptionsRepository";
 import { Option } from "../entities/Option";
-import { QuestionOption } from "../entities/QuestionOption";
 
 import { connection } from "@shared/infra/knex";
 
@@ -13,15 +12,11 @@ class OptionsRepository implements IOptionsRepository {
 
   public async create({
     name,
-    description,
     question_id,
   }: ICreateOptionDTO): Promise<Option> {
-    const option = new Option({ name, description });
-    var option_id = option.id;
-    const questionOption = new QuestionOption({question_id, option_id})
-    await connection<Option>("options").insert(option);
+    const option = new Option({ name, question_id });
 
-    await connection<QuestionOption>("questions_options").insert(questionOption)
+    await connection<Option>("options").insert(option);
 
     return option;
   }
@@ -29,9 +24,9 @@ class OptionsRepository implements IOptionsRepository {
   public async update({
     id,
     name,
-    description
+    question_id
   }: IUpdateOptionDTO): Promise<Option> {
-    const aOption = new Option({ name, description });
+    const aOption = new Option({ name, question_id });
 
     await connection<Option>("options").where('id', '=', id).update(aOption);
 

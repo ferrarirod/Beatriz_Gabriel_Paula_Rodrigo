@@ -14,13 +14,13 @@ class UpdateOptionService {
     public async execute({
         id,
         name,
-        description,
+        question_id
     }: IUpdateOptionDTO): Promise<Option> {
 
         const option = await this.OptionsRepository.update({
             id,
             name,
-            description
+            question_id
         });
 
         return option;

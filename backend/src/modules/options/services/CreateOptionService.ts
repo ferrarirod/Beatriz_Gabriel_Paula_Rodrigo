@@ -13,16 +13,12 @@ class CreateOptionService {
 
   public async execute({
     name,
-    description,
     question_id,
-    chalenge_id
   }: ICreateOptionDTO): Promise<Option> {
 
     const option = await this.OptionsRepository.create({
       name,
-      description,
       question_id,
-      chalenge_id
     });
 
     return option;

@@ -14,7 +14,7 @@ class Question {
 
   status: boolean;
 
-  expected_answer?: number;
+  expected_answer?: string;
 
   options?: Option[] | any;
 

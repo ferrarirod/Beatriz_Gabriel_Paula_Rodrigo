@@ -5,6 +5,6 @@ export interface ICreateQuestionDTO{
     description :string;
     score:number;
     status: boolean;
-    expected_answer?:number;
+    expected_answer?: string;
     
 }
