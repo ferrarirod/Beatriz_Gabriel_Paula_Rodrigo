@@ -14,7 +14,6 @@ class UpdateQuestionService {
     public async execute({
       id,
       title,
-      task_id,
       description,
       score,
       status,
@@ -24,7 +23,6 @@ class UpdateQuestionService {
       const question = await this.QuestionsRepository.update({
           id,
           title,
-          task_id,
           description,
           score,
           status,

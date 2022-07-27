@@ -2,10 +2,10 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    await knex.schema.createTable("questions_options", (table) => {
+    await knex.schema.createTable("tasks_questions", (table) => {
         table.string("id").primary().notNullable();
-        table.string("question_id").notNullable().references('id').inTable('questions').onDelete("cascade").onUpdate("cascade");
-        table.string("option_id").notNullable().references('id').inTable('options').onDelete("cascade").onUpdate("cascade");
+        table.string("question_id").references('id').inTable('questions').onDelete("cascade").onUpdate("cascade");
+        table.string("task_id").references('id').inTable('tasks').onDelete("cascade").onUpdate("cascade");
         table.dateTime("created_at").notNullable();
         table.dateTime("updated_at").notNullable();
     });

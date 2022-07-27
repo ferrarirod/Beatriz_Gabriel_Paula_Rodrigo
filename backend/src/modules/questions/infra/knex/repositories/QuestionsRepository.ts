@@ -14,7 +14,6 @@ class QuestionsRepository implements IQuestionsRepository {
 
   public async create({
     title,
-    task_id,
     description,
     score,
     status,
@@ -22,7 +21,6 @@ class QuestionsRepository implements IQuestionsRepository {
   }: ICreateQuestionDTO): Promise<Question> {
     
     const newQuestion = new Question({ title,
-      task_id,
       description,
       score,
       status,
@@ -35,20 +33,17 @@ class QuestionsRepository implements IQuestionsRepository {
   public async update({
     id,
     title,
-    task_id,
     description,
     score,
     status,
     expected_answer,
   }: IUpdateQuestionDTO): Promise<Question> {
     const updatedQuestion = new Question({  title,
-      task_id,
       description,
       score,
       status,
       expected_answer, });
     await connection<Question>("questions").where({id}).update({  title,
-      task_id,
       description,
       score,
       status,
