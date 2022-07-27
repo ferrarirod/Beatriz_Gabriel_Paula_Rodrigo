@@ -34,5 +34,7 @@ export function Private({ children }: PrivateProps) {
     );
   }
 
+  console.log("Veio")
+
   return <Navigate replace to="/login" />;
 }

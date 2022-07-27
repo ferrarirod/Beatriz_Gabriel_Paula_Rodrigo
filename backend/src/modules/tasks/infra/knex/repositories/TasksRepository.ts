@@ -5,7 +5,6 @@ import { IShowTaskDTO } from "@modules/tasks/dtos/IShowTaskDTO";
 import { ITasksRepository } from "@modules/tasks/repositories/ITasksRepository";
 import { Task } from "../entities/Task";
 import { connection } from "@shared/infra/knex";
-import { CreateTaskService } from "@modules/tasks/services/CreateTaskService";
 
 class TasksRepository implements ITasksRepository {
 

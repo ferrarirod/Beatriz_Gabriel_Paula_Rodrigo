@@ -1,10 +1,20 @@
-import { Comment, List, Tooltip, Button, Form, Input, Col } from "antd";
+import {
+  Comment,
+  List,
+  Tooltip,
+  Button,
+  Form,
+  Input,
+  Col,
+  message,
+} from "antd";
 import { api } from "../../services/api";
 import { useParams } from "react-router-dom";
 import { Class } from "../../types/classType";
 import { useEffect, useState, useCallback } from "react";
 
 import moment from "moment";
+import { useAuth } from "../../hooks/auth";
 
 const { TextArea } = Input;
 
@@ -20,7 +30,8 @@ const data = [
     ),
     datetime: (
       <Tooltip
-        title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}>
+        title={moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss")}
+      >
         <span>{moment().subtract(1, "days").fromNow()}</span>
       </Tooltip>
     ),
@@ -36,7 +47,8 @@ const data = [
     ),
     datetime: (
       <Tooltip
-        title={moment().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss")}>
+        title={moment().subtract(2, "days").format("YYYY-MM-DD HH:mm:ss")}
+      >
         <span>{moment().subtract(2, "days").fromNow()}</span>
       </Tooltip>
     ),
@@ -63,22 +75,44 @@ const formatUrl = (url: string | undefined) => {
 
 export function ViewClass() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [selectedClass, setSelectedClass] = useState<Class>();
+  const [finished, setFinished] = useState<boolean>(true);
 
   async function getClass(id: string | undefined) {
     try {
       const response = await api.get("classes/" + id);
       let data = response.data;
-      //data.module= response.data.module.name;
-      console.log("class", data[0]);
 
       setSelectedClass(data[0]);
 
-      console.log(selectedClass);
+      api
+        .get(`/finishedClasses/class/${id}`)
+        .then((response) => {
+          setFinished(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log("erro", JSON.stringify(err));
     }
   }
+
+  const markAsFinished = useCallback(async () => {
+    api
+      .post("/finishedClasses", {
+        user_id: user.id,
+        class_id: id,
+      })
+      .then((response) => {
+        setFinished(true)
+        message.success("Aula finalizada com sucesso");
+      })
+      .catch((err) => {
+        message.error("Não foi possível finalizar a aula");
+      });
+  }, [user.id, id]);
 
   useEffect(() => {
     getClass(id);
@@ -87,8 +121,16 @@ export function ViewClass() {
   return (
     <div
       className="class-container"
-      style={{ maxWidth: "1000px", margin: "auto" }}>
-      <h2>Aula: {selectedClass?.title}</h2>
+      style={{ maxWidth: "1000px", margin: "auto" }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2>Aula: {selectedClass?.title}</h2>
+        {!finished && (
+          <Button type="primary" onClick={markAsFinished}>
+            Marcar como concluída
+          </Button>
+        )}
+      </div>
       <h1>
         <b>Módulo:</b> {selectedClass?.module.name}
       </h1>
@@ -100,7 +142,8 @@ export function ViewClass() {
         <div className="text-content" style={{ width: "50%" }}>
           {selectedClass?.content && (
             <div
-              dangerouslySetInnerHTML={{ __html: selectedClass.content }}></div>
+              dangerouslySetInnerHTML={{ __html: selectedClass.content }}
+            ></div>
           )}
           {/* <p>{selectedClass?.content}</p> */}
         </div>
@@ -110,12 +153,14 @@ export function ViewClass() {
             height: "300px",
             display: "flex",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <iframe
             style={{ height: "100%", width: "100%" }}
             src={formatUrl(selectedClass?.link)}
             title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          ></iframe>
         </div>
       </div>
       <div style={{ height: "50%", display: "flex", justifyContent: "center" }}>
@@ -142,7 +187,8 @@ export function ViewClass() {
             <Form.Item>
               <Button
                 htmlType="submit"
-                /*loading={} onClick={}*/ type="primary">
+                /*loading={} onClick={}*/ type="primary"
+              >
                 Comentar
               </Button>
             </Form.Item>

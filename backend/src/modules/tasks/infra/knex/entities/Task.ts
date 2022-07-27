@@ -1,5 +1,6 @@
 import { ICreateTaskDTO } from "@modules/tasks/dtos/ICreateTaskDTO";
 import { Class} from "@modules/classes/infra/knex/entities/Class";
+import { Question } from  "@modules/questions/infra/knex/entities/Question";
 import { v4 as uuid } from "uuid";
 
 class Task {
@@ -8,6 +9,8 @@ class Task {
   title: string;
 
   class_id: string | Class;
+
+  questions?: Question[]
 
   description:string;
 
