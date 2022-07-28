@@ -14,7 +14,7 @@ export function Certification()
             <div className="site-card-wrapper">
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Card title="Módulo 1 - Pontação 13/30" bordered={true}>
+                        <Card title="Módulo 1 - Pontuação 13/30" bordered={true}>
                             <p style={{padding:2}}><b>Módulo de Introdução a Disciplina</b></p>
                             <List
                                 size="large"
