@@ -20,6 +20,7 @@ class UpdateUserService {
     name,
     password,
     type,
+    score
   }: IUpdateUserDTO) {
     const user = await this.usersRpository.findById(id);
 
@@ -28,6 +29,8 @@ class UpdateUserService {
     }
     const hashPassword = await this.hashProvider.generateHash(password);
 
+   if(!score)
+   score = 0;
    
     await this.usersRpository.update({
       id,
@@ -36,6 +39,7 @@ class UpdateUserService {
       name,
       password: hashPassword,
       type,
+      score
     });
   }
 }
