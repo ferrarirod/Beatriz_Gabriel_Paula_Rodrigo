@@ -25,8 +25,8 @@ class UsersRepository implements IUsersRepository {
       name,
       password,
       type,
-      score
     });
+    console.log('score',score)
     if(score)
     {
       this.updateScore({id,score});
@@ -102,6 +102,8 @@ class UsersRepository implements IUsersRepository {
     id,
     score
   }: IUpdateUserScoreDTO): Promise<void> {
+    console.log('update user', score)
+
     const user = await connection<User>("users").where({ id }).first()
 
     if(user)
