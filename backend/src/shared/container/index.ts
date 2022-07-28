@@ -23,6 +23,10 @@ import { ITasksQuestionsRepository } from "@modules/tasksQuestions/repositories/
 import { TasksQuestionsRepository } from "@modules/tasksQuestions/infra/knex/repositories/TasksQuestionsRepository";
 import { IAnswersRepository } from "@modules/answers/repositories/IAnswersRepository";
 import { AnswersRepository } from "@modules/answers/infra/knex/repositories/AnswersRepository";
+import { AwardsRepository } from "@modules/awards/infra/knex/repositories/AwardsRepository";
+import { IAwardsRepository } from "@modules/awards/repositories/IAwardsRepository";
+import { ConquestsRepository } from "@modules/conquests/infra/knex/repositories/ConquestsRepository";
+import { IConquestsRepository } from "@modules/conquests/repositories/IConquestsRepository";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -69,3 +73,13 @@ container.registerSingleton<IAnswersRepository>(
   "AnswersRepository",
   AnswersRepository
 );
+container.registerSingleton<IAwardsRepository>(
+  "AwardsRepository",
+  AwardsRepository
+);
+
+container.registerSingleton<IConquestsRepository>(
+  "ConquestsRepository",
+  ConquestsRepository
+);
+

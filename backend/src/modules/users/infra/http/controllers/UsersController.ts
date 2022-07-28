@@ -41,12 +41,13 @@ class UsersController {
     return response.json(user);
   }
   public async update(request: Request, response: Response): Promise<Response> {
-    const { email, cpf, name, password, type } = request.body;
+    const { email, cpf, name, password, type, score } = request.body;
     
     const { id } = request.params;
 
     const updateUserService = container.resolve(UpdateUserService);
 
+    console.log(score)
     await updateUserService.execute({
       id,
       email,
@@ -54,6 +55,7 @@ class UsersController {
       name,
       password,
       type,
+      score
     });
     return response.status(204).json({});
   }
