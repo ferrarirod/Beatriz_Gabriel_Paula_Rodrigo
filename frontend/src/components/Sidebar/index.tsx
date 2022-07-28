@@ -7,6 +7,7 @@ import {
   UserOutlined,
   PoweroffOutlined,
   CheckSquareOutlined,
+  CommentOutlined,
   QuestionOutlined,
   TrophyOutlined
 } from "@ant-design/icons";
@@ -42,7 +43,7 @@ export function SideBar() {
   const items: MenuItem[] = [
     getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
   ];
-  
+
   if (user.type === 0) {
     items.push(
       ...[
@@ -51,7 +52,8 @@ export function SideBar() {
         getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
         getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
         getItem(<Link to="/questions">Questões</Link>, "6", <QuestionOutlined />),
-        getItem(<Link to="/awards">Prêmios</Link>, "7", <TrophyOutlined/>)
+        getItem(<Link to="/comments">Comentários</Link>, "7", <CommentOutlined />),
+        getItem(<Link to="/awards">Prêmios</Link>, "8", <TrophyOutlined />)
 
       ]
     );

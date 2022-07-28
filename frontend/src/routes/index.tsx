@@ -11,6 +11,7 @@ import { ListAwardsPage } from "../pages/awards";
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 import { ProfileUserPage } from "../pages/profile";
+import { ViewQuestion } from "../pages/questions/view";
 import { ListQuestionsPage } from "../pages/questions";
 import { DashboardStudent } from "../pages/dashboard/student";
 import { useAuth } from "../hooks/auth";
@@ -84,7 +85,7 @@ function AppRoutes() {
         path="/comments"
         element={
           <Private>
-            <ListModulesPage />
+            <ListCommentsPage />
           </Private>
         }
       />
@@ -104,7 +105,8 @@ function AppRoutes() {
           </Private>
         }
       />
-         <Route
+
+      <Route
         path="/awards"
         element={
           <Private>
@@ -144,6 +146,7 @@ function AppRoutes() {
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
     </Routes>
+
   );
 }
 

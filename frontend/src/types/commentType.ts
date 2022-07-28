@@ -4,5 +4,5 @@ export interface Comment {
     class_id: string;
     content: string;
     is_anonymous: boolean;
-    create_date: Date;
+    created_at: Date;
 }
