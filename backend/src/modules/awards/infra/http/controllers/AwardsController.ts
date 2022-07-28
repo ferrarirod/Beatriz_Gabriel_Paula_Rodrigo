@@ -11,7 +11,7 @@ import { container } from "tsyringe";
 class AwardsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, description, score } = request.body;
-
+console.log('score',score)
     const createAwardService = container.resolve(CreateAwardService);
 
     const award = await createAwardService.execute({

@@ -108,17 +108,25 @@ class UsersRepository implements IUsersRepository {
 
     if(user)
     {
-      var newScore = user?.score + score;
-      const awards =  connection<Award>("awards").where('score',score);
       const user_id = id;
-  
-      (await awards).forEach(async (award : Award)=>{
+      var currentScore = user.score;
+      var newScore = user?.score + score;
+
+      if(currentScore == 0)
+      currentScore = score;
+
+      const awards = await  connection<Award>("awards").whereRaw('score <= ' + currentScore);
+    
+
+      console.log('awards score menor que' + score, awards.length)
+      awards.forEach(async (award : Award)=>{
         const createConquestService = container.resolve(CreateConquestService);
         var award_id = award.id
         const newConquest = await createConquestService.execute({
             user_id,
             award_id
         });
+        console.log('new conquest', newConquest);
   
       });
 
