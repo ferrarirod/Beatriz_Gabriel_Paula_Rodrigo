@@ -8,6 +8,7 @@ import {
   PoweroffOutlined,
   CheckSquareOutlined,
   CommentOutlined,
+  OrderedListOutlined,
   QuestionOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
@@ -42,26 +43,31 @@ export function SideBar() {
 
   const items: MenuItem[] = [
     getItem(<Link to="/">Painel</Link>, "1", <DashboardFilled />),
+    getItem(
+      <Link to="/leaderboard">Classificação</Link>,
+      "2",
+      <OrderedListOutlined />
+    ),
   ];
 
   if (user.type === 0) {
     items.push(
       ...[
-        getItem(<Link to="/users">Usuários</Link>, "2", <UserOutlined />),
-        getItem(<Link to="/modules">Modulos</Link>, "3", <BookOutlined />),
-        getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
-        getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
+        getItem(<Link to="/users">Usuários</Link>, "3", <UserOutlined />),
+        getItem(<Link to="/modules">Modulos</Link>, "4", <BookOutlined />),
+        getItem(<Link to="/classes">Aulas</Link>, "5", <PlayCircleOutlined />),
+        getItem(<Link to="/tasks">Tarefas</Link>, "6", <CheckSquareOutlined />),
         getItem(
           <Link to="/questions">Questões</Link>,
-          "6",
+          "7",
           <QuestionOutlined />
         ),
         getItem(
           <Link to="/comments">Comentários</Link>,
-          "7",
+          "8",
           <CommentOutlined />
         ),
-        getItem(<Link to="/awards">Prêmios</Link>, "8", <TrophyOutlined />),
+        getItem(<Link to="/awards">Prêmios</Link>, "9", <TrophyOutlined />),
       ]
     );
   }
@@ -71,7 +77,7 @@ export function SideBar() {
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
-      "9",
+      "10",
       <PoweroffOutlined />
     )
   );

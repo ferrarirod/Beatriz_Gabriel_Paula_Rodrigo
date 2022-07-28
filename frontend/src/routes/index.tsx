@@ -12,6 +12,7 @@ import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 import { ProfileUserPage } from "../pages/profile";
 import { ViewQuestion } from "../pages/questions/view";
+import { LeaderBoard } from "../pages/leaderboard";
 import { ListQuestionsPage } from "../pages/questions";
 import { DashboardStudent } from "../pages/dashboard/student";
 import { useAuth } from "../hooks/auth";
@@ -145,6 +146,15 @@ function AppRoutes() {
       {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
+      
+      <Route path="/leaderboard"
+        element={
+         <Private>
+          <LeaderBoard/>
+         </Private> 
+        }
+      />
+    
     </Routes>
 
   );
