@@ -11,6 +11,7 @@ import {
   OrderedListOutlined,
   QuestionOutlined,
   TrophyOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
@@ -48,26 +49,31 @@ export function SideBar() {
       "2",
       <OrderedListOutlined />
     ),
+    getItem(
+      <Link to="/certificates">Certificações</Link>,
+      "3",
+      <StarOutlined />
+    ),
   ];
 
   if (user.type === 0) {
     items.push(
       ...[
-        getItem(<Link to="/users">Usuários</Link>, "3", <UserOutlined />),
-        getItem(<Link to="/modules">Modulos</Link>, "4", <BookOutlined />),
-        getItem(<Link to="/classes">Aulas</Link>, "5", <PlayCircleOutlined />),
-        getItem(<Link to="/tasks">Tarefas</Link>, "6", <CheckSquareOutlined />),
+        getItem(<Link to="/users">Usuários</Link>, "4", <UserOutlined />),
+        getItem(<Link to="/modules">Modulos</Link>, "5", <BookOutlined />),
+        getItem(<Link to="/classes">Aulas</Link>, "6", <PlayCircleOutlined />),
+        getItem(<Link to="/tasks">Tarefas</Link>, "7", <CheckSquareOutlined />),
         getItem(
           <Link to="/questions">Questões</Link>,
-          "7",
+          "8",
           <QuestionOutlined />
         ),
         getItem(
           <Link to="/comments">Comentários</Link>,
-          "8",
+          "9",
           <CommentOutlined />
         ),
-        getItem(<Link to="/awards">Prêmios</Link>, "9", <TrophyOutlined />),
+        getItem(<Link to="/awards">Prêmios</Link>, "10", <TrophyOutlined />),
       ]
     );
   }
@@ -77,7 +83,7 @@ export function SideBar() {
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
-      "10",
+      "11",
       <PoweroffOutlined />
     )
   );
