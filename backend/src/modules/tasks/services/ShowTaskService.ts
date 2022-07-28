@@ -15,7 +15,7 @@ class ShowTaskService {
       id,
     }: IShowTaskDTO): Promise<Task[]> {
   
-      const Task = await this.TasksRepository.delete({
+      const Task = await this.TasksRepository.show({
           id,
       });
   

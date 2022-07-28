@@ -12,6 +12,17 @@ import { CommentRepository } from "@modules/comments/infra/knex/repositories/Com
 import { ICommentsRepository } from "@modules/comments/repositories/ICommentsRepository";
 import { TasksRepository } from "@modules/tasks/infra/knex/repositories/TasksRepository";
 import { ITasksRepository } from "@modules/tasks/repositories/ITasksRepository";
+import { QuestionsRepository } from "@modules/questions/infra/knex/repositories/QuestionsRepository";
+import { IQuestionsRepository } from "@modules/questions/repositories/IQuestionsRepository";
+import { OptionsRepository } from "@modules/options/infra/knex/repositories/OptionsRepository";
+import { IOptionsRepository } from "@modules/options/repositories/IOptionsRepository";
+
+
+
+import { IFinishedClassesRepository } from "@modules/finishedClasses/repositories/IFinishedClassesRepository";
+import { FinishedClassesRepository } from "@modules/finishedClasses/infra/knex/repositories/FinishedClassesRepository";
+import { ITasksQuestionsRepository } from "@modules/tasksQuestions/repositories/ITasksQuestionsRepository";
+import { TasksQuestionsRepository } from "@modules/tasksQuestions/infra/knex/repositories/TasksQuestionsRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -33,4 +44,24 @@ container.registerSingleton<ICommentsRepository>(
 container.registerSingleton<ITasksRepository>(
   "TasksRepository",
   TasksRepository
+);
+
+container.registerSingleton<IQuestionsRepository>(
+  "QuestionsRepository",
+  QuestionsRepository
+);
+
+container.registerSingleton<IOptionsRepository>(
+  "OptionsRepository",
+  OptionsRepository
+);
+
+container.registerSingleton<IFinishedClassesRepository>(
+  "FinishedClassesRepository",
+  FinishedClassesRepository
+);
+
+container.registerSingleton<ITasksQuestionsRepository>(
+  "TasksQuestionsRepository",
+  TasksQuestionsRepository
 );
