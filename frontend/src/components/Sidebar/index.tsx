@@ -8,6 +8,7 @@ import {
   PoweroffOutlined,
   CheckSquareOutlined,
   QuestionOutlined,
+  TrophyOutlined
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
@@ -50,6 +51,8 @@ export function SideBar() {
         getItem(<Link to="/classes">Aulas</Link>, "4", <PlayCircleOutlined />),
         getItem(<Link to="/tasks">Tarefas</Link>, "5", <CheckSquareOutlined />),
         getItem(<Link to="/questions">Questões</Link>, "6", <QuestionOutlined />),
+        getItem(<Link to="/awards">Prêmios</Link>, "7", <TrophyOutlined/>)
+
       ]
     );
   }
@@ -59,7 +62,7 @@ export function SideBar() {
       <Link to="/login" onClick={signOut}>
         Sair
       </Link>,
-      "7",
+      "8",
       <PoweroffOutlined />
     )
   );

@@ -5,6 +5,8 @@ import { ViewClass } from "../pages/classes/view";
 import { ListModulesPage } from "../pages/modules";
 import { ListCommentsPage } from "../pages/comments";
 import { ListTasksPage } from "../pages/tasks";
+import { ListAwardsPage } from "../pages/awards";
+
 
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
@@ -99,6 +101,14 @@ function AppRoutes() {
         element={
           <Private>
             <ListTasksPage />
+          </Private>
+        }
+      />
+         <Route
+        path="/awards"
+        element={
+          <Private>
+            <ListAwardsPage />
           </Private>
         }
       />
