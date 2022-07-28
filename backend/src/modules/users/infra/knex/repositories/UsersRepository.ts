@@ -4,6 +4,10 @@ import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { User } from "../entities/User";
 import { connection } from "@shared/infra/knex";
 import { IUpdateUserDTO } from "@modules/users/dtos/IUpdateUserDTO";
+import { IUpdateUserScoreDTO } from "@modules/users/dtos/IUpdateUserScoreDTO";
+import { Award } from "@modules/awards/infra/knex/entities/Award";
+import { CreateConquestService } from "@modules/conquests/services/CreateConquestService";
+import { container } from "tsyringe";
 
 class UsersRepository implements IUsersRepository {
   public async update({
@@ -13,6 +17,7 @@ class UsersRepository implements IUsersRepository {
     name,
     password,
     type,
+    score
   }: IUpdateUserDTO): Promise<void> {
     await connection<User>("users").where({ id }).first().update({
       cpf,
@@ -20,7 +25,12 @@ class UsersRepository implements IUsersRepository {
       name,
       password,
       type,
+      score
     });
+    if(score)
+    {
+      this.updateScore({id,score});
+    }
   }
   public async delete(id: string): Promise<void> {
     await connection<User>("users")
@@ -84,8 +94,37 @@ class UsersRepository implements IUsersRepository {
       name,
       password,
       type,
+      score:0
     });
   }
+
+  public async updateScore({
+    id,
+    score
+  }: IUpdateUserScoreDTO): Promise<void> {
+    const user = await connection<User>("users").where({ id }).first()
+
+    if(user)
+    {
+      var newScore = user?.score + score;
+      const awards =  connection<Award>("awards").where('score',score);
+      const user_id = id;
+  
+      (await awards).forEach(async (award : Award)=>{
+        const createConquestService = container.resolve(CreateConquestService);
+        var award_id = award.id
+        const newConquest = await createConquestService.execute({
+            user_id,
+            award_id
+        });
+  
+      });
+
+      await connection<User>("users").where({ id }).first().update({score:newScore});
+  
+    }
+  }
+  
 }
 
 export { UsersRepository };

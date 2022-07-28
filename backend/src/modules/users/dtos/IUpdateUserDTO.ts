@@ -5,4 +5,5 @@ export interface IUpdateUserDTO{
     cpf: string;
     password: string;
     type: number;
+    score:number;
 }

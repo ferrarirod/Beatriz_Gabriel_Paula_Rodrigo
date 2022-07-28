@@ -7,6 +7,7 @@ export function up(knex: Knex): Promise<void> {
     table.string("email").unique().notNullable();
     table.string("cpf").unique().notNullable();
     table.string("password").notNullable();
+    table.integer("score").notNullable()
     table.integer("type").notNullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
