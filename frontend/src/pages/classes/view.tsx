@@ -20,7 +20,7 @@ const { TextArea } = Input;
 
 const data = [
   {
-    author: "Han Solo",
+    author: "Jorge",
     content: (
       <p>
         We supply a series of design principles, practical patterns and high
@@ -37,7 +37,7 @@ const data = [
     ),
   },
   {
-    author: "Han Solo",
+    author: "Jorge",
     content: (
       <p>
         We supply a series of design principles, practical patterns and high
