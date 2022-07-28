@@ -10,5 +10,5 @@ export interface IUsersRepository {
   findAll(): Promise<User[]>;
   delete(id: string): Promise<void>;
   findById(id: string): Promise<User | undefined>;
-  update(data: IUpdateUserDTO): Promise<void>;
+  updateScore(user: User, addScore: number): Promise<User>
 }

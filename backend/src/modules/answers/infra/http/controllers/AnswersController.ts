@@ -1,5 +1,6 @@
 import { CreateAnswersService } from "@modules/answers/services/CreateAnswersService";
 import { SumScoreQuestionsService } from "@modules/questions/services/SumScoreQuestionsServices";
+import { UpdateScoreUserService } from "@modules/users/services/UpdateScoreUserService";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
@@ -17,13 +18,21 @@ class AnswersController {
       task_id,
     });
 
-    const sumScoreQuestionsService = container.resolve(SumScoreQuestionsService)
+    const sumScoreQuestionsService = container.resolve(
+      SumScoreQuestionsService
+    );
 
     const score = await sumScoreQuestionsService.execute({
-        answers: answer
-    })
+      answers: answer,
+    });
 
-    //  adicionar 
+    const updateScoreUserService = container.resolve(UpdateScoreUserService);
+
+    await updateScoreUserService.execute({
+      user_id: id,
+      addScore: score,
+    });
+    
     return response.json(answer);
   }
 }

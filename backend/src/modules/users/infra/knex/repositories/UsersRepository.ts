@@ -10,28 +10,6 @@ import { CreateConquestService } from "@modules/conquests/services/CreateConques
 import { container } from "tsyringe";
 
 class UsersRepository implements IUsersRepository {
-  public async update({
-    id,
-    cpf,
-    email,
-    name,
-    password,
-    type,
-    score
-  }: IUpdateUserDTO): Promise<void> {
-    await connection<User>("users").where({ id }).first().update({
-      cpf,
-      email,
-      name,
-      password,
-      type,
-    });
-    console.log('score',score)
-    if(score)
-    {
-      this.updateScore({id,score});
-    }
-  }
   public async delete(id: string): Promise<void> {
     await connection<User>("users")
       .where({
@@ -94,47 +72,24 @@ class UsersRepository implements IUsersRepository {
       name,
       password,
       type,
-      score:0
+      score: 0,
     });
   }
 
-  public async updateScore({
-    id,
-    score
-  }: IUpdateUserScoreDTO): Promise<void> {
-    console.log('update user', score)
-
-    const user = await connection<User>("users").where({ id }).first()
-
-    if(user)
-    {
-      const user_id = id;
-      var currentScore = user.score;
-      var newScore = user?.score + score;
-
-      if(currentScore == 0)
-      currentScore = score;
-
-      const awards = await  connection<Award>("awards").whereRaw('score <= ' + currentScore);
-    
-
-      console.log('awards score menor que' + score, awards.length)
-      awards.forEach(async (award : Award)=>{
-        const createConquestService = container.resolve(CreateConquestService);
-        var award_id = award.id
-        const newConquest = await createConquestService.execute({
-            user_id,
-            award_id
-        });
-        console.log('new conquest', newConquest);
-  
+  public async updateScore(user: User, addScore: number): Promise<User> {
+    await connection<User>("users")
+      .where({
+        id: user.id,
+      })
+      .update({
+        score: user.score + addScore,
       });
 
-      await connection<User>("users").where({ id }).first().update({score:newScore});
-  
-    }
+    return {
+      ...user,
+      score: user.score + addScore,
+    };
   }
-  
 }
 
 export { UsersRepository };
