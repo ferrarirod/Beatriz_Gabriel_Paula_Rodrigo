@@ -6,6 +6,7 @@ import { IShowQuestionDTO } from "@modules/questions/dtos/IShowQuestionDTO";
 
 import { Question } from "../infra/knex/entities/Question";
 import { IUpdateExpectedAnswerQuestionDTO } from "../dtos/IUpdateExpectedAnswerQuestionDTO";
+import { ISumScoreQuestionsDTO } from "../dtos/ISumScoreQuestionsDTO";
 
 export interface IQuestionsRepository {
   create(data: ICreateQuestionDTO ): Promise<Question>;
@@ -14,4 +15,5 @@ export interface IQuestionsRepository {
   show(data: IShowQuestionDTO) : Promise<Question[]>;
   index() : Promise<Question[]>;
   updateExepectedAnswer(data: IUpdateExpectedAnswerQuestionDTO):Promise<Question>;
+  sumScoreQuestions(data:ISumScoreQuestionsDTO):Promise<number>;
 }

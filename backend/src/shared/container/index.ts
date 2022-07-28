@@ -17,13 +17,12 @@ import { IQuestionsRepository } from "@modules/questions/repositories/IQuestions
 import { OptionsRepository } from "@modules/options/infra/knex/repositories/OptionsRepository";
 import { IOptionsRepository } from "@modules/options/repositories/IOptionsRepository";
 
-
-
 import { IFinishedClassesRepository } from "@modules/finishedClasses/repositories/IFinishedClassesRepository";
 import { FinishedClassesRepository } from "@modules/finishedClasses/infra/knex/repositories/FinishedClassesRepository";
 import { ITasksQuestionsRepository } from "@modules/tasksQuestions/repositories/ITasksQuestionsRepository";
 import { TasksQuestionsRepository } from "@modules/tasksQuestions/infra/knex/repositories/TasksQuestionsRepository";
-
+import { IAnswersRepository } from "@modules/answers/repositories/IAnswersRepository";
+import { AnswersRepository } from "@modules/answers/infra/knex/repositories/AnswersRepository";
 
 container.registerSingleton<IUsersRepository>(
   "UsersRepository",
@@ -64,4 +63,9 @@ container.registerSingleton<IFinishedClassesRepository>(
 container.registerSingleton<ITasksQuestionsRepository>(
   "TasksQuestionsRepository",
   TasksQuestionsRepository
+);
+
+container.registerSingleton<IAnswersRepository>(
+  "AnswersRepository",
+  AnswersRepository
 );

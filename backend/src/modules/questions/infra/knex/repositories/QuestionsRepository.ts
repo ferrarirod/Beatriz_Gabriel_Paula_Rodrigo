@@ -5,12 +5,28 @@ import { IShowQuestionDTO } from "@modules/questions/dtos/IShowQuestionDTO";
 import { IQuestionsRepository } from "@modules/questions/repositories/IQuestionsRepository";
 import { Question } from "../entities/Question";
 import { connection } from "@shared/infra/knex";
-import { CreateQuestionService } from "@modules/questions/services/CreateQuestionService";
-import { join } from "path";
-import { Option } from "@modules/options/infra/knex/entities/Option";
 import { IUpdateExpectedAnswerQuestionDTO } from "@modules/questions/dtos/IUpdateExpectedAnswerQuestionDTO";
+import { ISumScoreQuestionsDTO } from "@modules/questions/dtos/ISumScoreQuestionsDTO";
 
 class QuestionsRepository implements IQuestionsRepository {
+  public async sumScoreQuestions({
+    answers,
+  }: ISumScoreQuestionsDTO): Promise<number> {
+    const result: any = await connection<Question>("questions")
+      .whereIn(
+        "id",
+        answers.map((a) => a.question_id)
+      )
+      .whereIn(
+        "expected_answer",
+        answers.map((a) => a.option_id)
+      )
+      .sum("score as sum");
+
+    const [score] = result;
+
+    return score.sum;
+  }
   public async updateExepectedAnswer({
     question,
     expected_answer,

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Radio, Row } from "antd";
+import { Button, Col, Form, message, Radio, Row } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -48,10 +48,19 @@ export function ShowTask() {
 
   const handleSubmitForm: SubmitHandler<FormState> = useCallback(
     async (formValue) => {
-      console.log(formValue);
-      // Enviar resposta
+      api
+        .post("/answers", {
+          answers: formValue.answer,
+          task_id: id,
+        })
+        .then((response) => {
+          message.success("Tarefa respondida com sucesso!");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    []
+    [id]
   );
 
   useEffect(() => {
@@ -117,7 +126,11 @@ export function ShowTask() {
           marginTop: "24px",
         }}
       >
-        <Button type="primary" size="large" onClick={handleSubmit(handleSubmitForm)}>
+        <Button
+          type="primary"
+          size="large"
+          onClick={handleSubmit(handleSubmitForm)}
+        >
           Finalizar
         </Button>
       </Row>

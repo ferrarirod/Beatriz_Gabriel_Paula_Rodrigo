@@ -11,6 +11,7 @@ import { optionsRoutes } from "@modules/options/infra/http/routes/options.routes
 
 import { finishedClassesRoutes } from "@modules/finishedClasses/infra/http/routes/finishedClasses.routes";
 import { tasksQuestionsRoutes } from "@modules/tasksQuestions/infra/http/routes/tasksQuestions.routes";
+import { answersRoutes } from "@modules/answers/infra/http/routes/answers.routes";
 
 
 
@@ -26,6 +27,7 @@ routes.use("/questions", questionsRoutes);
 routes.use("/options", optionsRoutes);
 routes.use("/tasksQuestions", tasksQuestionsRoutes);
 routes.use("/finishedClasses", finishedClassesRoutes);
+routes.use("/answers", answersRoutes);
 
 
 
