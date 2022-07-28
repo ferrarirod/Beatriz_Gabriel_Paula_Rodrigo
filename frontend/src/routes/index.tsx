@@ -7,11 +7,9 @@ import { ListCommentsPage } from "../pages/comments";
 import { ListTasksPage } from "../pages/tasks";
 import { ListAwardsPage } from "../pages/awards";
 
-
 import { Private } from "../templates/Private";
 import { LoginPage } from "../pages/login";
 import { ProfileUserPage } from "../pages/profile";
-import { ViewQuestion } from "../pages/questions/view";
 import { LeaderBoard } from "../pages/leaderboard";
 import { ListQuestionsPage } from "../pages/questions";
 import { DashboardStudent } from "../pages/dashboard/student";
@@ -22,6 +20,7 @@ import { PrivateForm } from "../templates/PrivateForm";
 import { ShowTask } from "../pages/tasks/show";
 import { CreateTasksQuestionsPage } from "../pages/tasks/questions";
 import { Certification } from "../pages/certifications";
+import { ShowAnswerPage } from "../pages/answers/show";
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -144,26 +143,37 @@ function AppRoutes() {
         }
       />
 
+      <Route
+        path="/tasks/answer/:id"
+        element={
+          <PrivateForm>
+            <ShowAnswerPage />
+          </PrivateForm>
+        }
+      />
+
       {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
-      
-      <Route path="/leaderboard"
+
+      <Route
+        path="/leaderboard"
         element={
-         <Private>
-          <LeaderBoard/>
-         </Private> 
+          <Private>
+            <LeaderBoard />
+          </Private>
         }
       />
-    
-      <Route path="/certificates" element={
-        <Private>
-          <Certification/>
-        </Private>
-      }/>
 
+      <Route
+        path="/certificates"
+        element={
+          <Private>
+            <Certification />
+          </Private>
+        }
+      />
     </Routes>
-
   );
 }
 

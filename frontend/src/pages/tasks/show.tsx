@@ -1,7 +1,7 @@
-import { Button, Col, Form, message, Radio, Row } from "antd";
+import { Button, Form, message, Row } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { RadioForm } from "../../components/Radio";
 import { api } from "../../services/api";
 
@@ -32,6 +32,8 @@ interface FormState {
 export function ShowTask() {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const { control, handleSubmit } = useForm();
 
@@ -55,17 +57,18 @@ export function ShowTask() {
         })
         .then((response) => {
           message.success("Tarefa respondida com sucesso!");
+          navigate(`/tasks/answer/${id}`);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    [id]
+    [id, navigate]
   );
 
   useEffect(() => {
     getQuestions();
-  }, []);
+  }, [getQuestions]);
 
   return (
     <div style={{ width: "100%", minHeight: "92vh" }}>

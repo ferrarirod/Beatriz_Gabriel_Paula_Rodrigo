@@ -38,7 +38,7 @@ export function CreateTasksQuestionsPage() {
 
   useEffect(() => {
     getQuestions();
-  }, []);
+  }, [getQuestions]);
 
   const handleCreateTaskQuestions = useCallback(async () => {
     api
@@ -53,7 +53,7 @@ export function CreateTasksQuestionsPage() {
       .catch((err) => {
         console.log(err);
       });
-  }, [selectedQuestions, id]);
+  }, [selectedQuestions, id,navigate]);
 
   const handleUpdateSelectQuestion = useCallback(
     (id: any) => {

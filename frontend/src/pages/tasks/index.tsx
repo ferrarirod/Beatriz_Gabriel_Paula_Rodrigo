@@ -7,7 +7,6 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
 import { Class } from "../../types/classType";
-import { Module } from "../../types/moduleType";
 import { Task } from "../../types/taskType";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FormDrawer } from "../../components/Form";
@@ -20,7 +19,6 @@ import {
   Drawer,
   Button,
   Form,
-  Input,
   Radio,
   Card,
   List,
@@ -95,7 +93,6 @@ export function ListTasksPage() {
   const navigate = useNavigate()
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 
