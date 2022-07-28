@@ -4,9 +4,9 @@ const connection = knex({
     client: "mysql",
     connection:{
         host: "localhost",
-        port: 13306,
+        port: 3306,
         user: "root",
-        password: "password",
+        password: "",
         database: "web_masters",
     }
 })

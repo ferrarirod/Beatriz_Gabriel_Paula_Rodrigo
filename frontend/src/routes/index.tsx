@@ -17,6 +17,7 @@ import { ListClassesByModule } from "../pages/classes/indexByModule";
 import { PrivateForm } from "../templates/PrivateForm";
 import { ShowTask } from "../pages/tasks/show";
 import { CreateTasksQuestionsPage } from "../pages/tasks/questions";
+import { Certification } from "../pages/certifications";
 
 function AppRoutes() {
   const { user } = useAuth();
@@ -133,6 +134,12 @@ function AppRoutes() {
       {/* <Route path="/modules/create" element={<h1>Modules / Create</h1>} />
       <Route path="/users" element={<h1>Users</h1>} />
       <Route path="/users/create" element={<h1>Users / Create</h1>} /> */}
+      <Route path="/certificates" element={
+        <Private>
+          <Certification/>
+        </Private>
+      }/>
+
     </Routes>
   );
 }
