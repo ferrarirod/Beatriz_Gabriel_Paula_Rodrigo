@@ -4,6 +4,10 @@ import { IUsersRepository } from "@modules/users/repositories/IUsersRepository";
 import { User } from "../entities/User";
 import { connection } from "@shared/infra/knex";
 import { IUpdateUserDTO } from "@modules/users/dtos/IUpdateUserDTO";
+import { IUpdateUserScoreDTO } from "@modules/users/dtos/IUpdateUserScoreDTO";
+import { Award } from "@modules/awards/infra/knex/entities/Award";
+import { CreateConquestService } from "@modules/conquests/services/CreateConquestService";
+import { container } from "tsyringe";
 
 class UsersRepository implements IUsersRepository {
   public async update({
@@ -13,6 +17,7 @@ class UsersRepository implements IUsersRepository {
     name,
     password,
     type,
+    score
   }: IUpdateUserDTO): Promise<void> {
     await connection<User>("users").where({ id }).first().update({
       cpf,
@@ -21,6 +26,11 @@ class UsersRepository implements IUsersRepository {
       password,
       type,
     });
+    console.log('score',score)
+    if(score)
+    {
+      this.updateScore({id,score});
+    }
   }
   public async delete(id: string): Promise<void> {
     await connection<User>("users")
@@ -84,8 +94,47 @@ class UsersRepository implements IUsersRepository {
       name,
       password,
       type,
+      score:0
     });
   }
+
+  public async updateScore({
+    id,
+    score
+  }: IUpdateUserScoreDTO): Promise<void> {
+    console.log('update user', score)
+
+    const user = await connection<User>("users").where({ id }).first()
+
+    if(user)
+    {
+      const user_id = id;
+      var currentScore = user.score;
+      var newScore = user?.score + score;
+
+      if(currentScore == 0)
+      currentScore = score;
+
+      const awards = await  connection<Award>("awards").whereRaw('score <= ' + currentScore);
+    
+
+      console.log('awards score menor que' + score, awards.length)
+      awards.forEach(async (award : Award)=>{
+        const createConquestService = container.resolve(CreateConquestService);
+        var award_id = award.id
+        const newConquest = await createConquestService.execute({
+            user_id,
+            award_id
+        });
+        console.log('new conquest', newConquest);
+  
+      });
+
+      await connection<User>("users").where({ id }).first().update({score:newScore});
+  
+    }
+  }
+  
 }
 
 export { UsersRepository };

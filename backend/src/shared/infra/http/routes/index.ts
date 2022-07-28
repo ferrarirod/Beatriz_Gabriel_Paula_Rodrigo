@@ -8,9 +8,10 @@ import { commentsRoutes } from "@modules/comments/infra/http/routes/comments.rou
 import { tasksRoutes } from "@modules/tasks/infra/http/routes/tasks.routes";
 import { questionsRoutes } from "@modules/questions/infra/http/routes/questions.routes";
 import { optionsRoutes } from "@modules/options/infra/http/routes/options.routes";
-
 import { finishedClassesRoutes } from "@modules/finishedClasses/infra/http/routes/finishedClasses.routes";
 import { tasksQuestionsRoutes } from "@modules/tasksQuestions/infra/http/routes/tasksQuestions.routes";
+import { awardsRoutes } from "@modules/awards/infra/http/routes/awards.routes";
+import { conquestsRoutes } from "@modules/conquests/infra/http/routes/conquests.routes";
 
 
 
@@ -26,6 +27,10 @@ routes.use("/questions", questionsRoutes);
 routes.use("/options", optionsRoutes);
 routes.use("/tasksQuestions", tasksQuestionsRoutes);
 routes.use("/finishedClasses", finishedClassesRoutes);
+routes.use("/awards", awardsRoutes);
+routes.use("/conquests", conquestsRoutes);
+
+
 
 
 
