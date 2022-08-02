@@ -12,5 +12,5 @@ export interface ICommentsRepository {
     delete(data: IDeleteCommentDTO): Promise<Comment[]>;
     show(data: IShowCommentDTO): Promise<Comment[]>;
     index(): Promise<Comment[]>;
-
+    findByClassId(class_id: string):Promise<Comment[]>;
 }

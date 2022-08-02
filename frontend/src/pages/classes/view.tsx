@@ -15,6 +15,7 @@ import { useEffect, useState, useCallback } from "react";
 
 import moment from "moment";
 import { useAuth } from "../../hooks/auth";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 const { TextArea } = Input;
 
@@ -55,13 +56,15 @@ const data = [
   },
 ];
 
-interface CommentItem {
-  author: string;
-  avatar: string;
-  content: React.ReactNode;
-  datetime: string;
+interface Comment {
+  user_name: string;
+  content: string;
+  created_at: string;
 }
 
+interface FormComment {
+  comment: string;
+}
 interface EditorProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
@@ -78,6 +81,12 @@ export function ViewClass() {
   const { user } = useAuth();
   const [selectedClass, setSelectedClass] = useState<Class>();
   const [finished, setFinished] = useState<boolean>(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const { control, handleSubmit, reset } = useForm({
+    defaultValues: {
+      comment: "",
+    },
+  });
 
   async function getClass(id: string | undefined) {
     try {
@@ -99,6 +108,46 @@ export function ViewClass() {
     }
   }
 
+  const handleCreateComment: SubmitHandler<FormComment> = useCallback(
+    async (formValue) => {
+      api
+        .post("/comments", {
+          class_id: id,
+          user_id: user.id,
+          content: formValue.comment,
+          is_anonymous: false,
+        })
+        .then((response) => {
+          setComments((prev) => [
+            ...prev,
+            {
+              ...response.data,
+              user_name: user.name,
+            },
+          ]);
+          message.success("Comentário realizado com sucesso!");
+          reset({
+            comment: "",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [id, user, reset]
+  );
+
+  const getComments = useCallback(async () => {
+    api
+      .get(`/comments/class/${id}`)
+      .then((response) => {
+        setComments(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
   const markAsFinished = useCallback(async () => {
     api
       .post("/finishedClasses", {
@@ -106,7 +155,7 @@ export function ViewClass() {
         class_id: id,
       })
       .then((response) => {
-        setFinished(true)
+        setFinished(true);
         message.success("Aula finalizada com sucesso");
       })
       .catch((err) => {
@@ -116,7 +165,8 @@ export function ViewClass() {
 
   useEffect(() => {
     getClass(id);
-  }, []);
+    getComments();
+  }, [id]);
 
   return (
     <div
@@ -163,36 +213,57 @@ export function ViewClass() {
           ></iframe>
         </div>
       </div>
-      <div style={{ height: "50%", display: "flex", justifyContent: "center" }}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ height: "50%", width:"100%", display: "flex", justifyContent: "center" }}>
+        <div style={{width:"100%", display: "flex", flexDirection: "column" }}>
           <List
             className="comment-list"
             header={`${data.length} comentários`}
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={comments}
             renderItem={(item) => (
               <li>
                 <Comment
-                  author={item.author}
+                  author={item.user_name}
                   content={item.content}
-                  datetime={item.datetime}
+                  datetime={
+                    <Tooltip
+                      title={Intl.DateTimeFormat("pt-BR", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }).format(new Date(item.created_at))}
+                    >
+                      <span>
+                        {Intl.DateTimeFormat("pt-BR", {
+                          month: "2-digit",
+                          day: "2-digit",
+                        }).format(new Date(item.created_at))}
+                      </span>
+                    </Tooltip>
+                  }
                 />
               </li>
             )}
           />
-          <>
+          <Form id="form-comment">
             <Form.Item>
-              <TextArea rows={4} /*onChange={} value={}*/ />
+              <Controller
+                control={control}
+                name="comment"
+                render={({ field }) => <TextArea rows={4} {...field} />}
+              />
             </Form.Item>
             <Form.Item>
               <Button
-                htmlType="submit"
-                /*loading={} onClick={}*/ type="primary"
+                onClick={handleSubmit(handleCreateComment)}
+                type="primary"
               >
                 Comentar
               </Button>
             </Form.Item>
-          </>
+          </Form>
         </div>
       </div>
     </div>

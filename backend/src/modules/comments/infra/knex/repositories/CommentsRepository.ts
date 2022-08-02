@@ -8,12 +8,21 @@ import { Comment } from "../entities/Comment";
 import { connection } from "@shared/infra/knex";
 
 class CommentRepository implements ICommentsRepository {
+  public async findByClassId(class_id: string): Promise<Comment[]> {
+    const comments = await connection<Comment>("comments")
+      .where({
+        class_id,
+      })
+      .innerJoin("users", "users.id", "comments.user_id")
+      .select("comments.id as id", "content", "comments.created_at as created_at", "users.name as user_name");
+    return comments;
+  }
 
   public async create({
     user_id,
     class_id,
     content,
-    is_anonymous
+    is_anonymous,
   }: ICreateCommentDTO): Promise<Comment> {
     const comment = new Comment({ user_id, class_id, content, is_anonymous });
 
@@ -27,26 +36,29 @@ class CommentRepository implements ICommentsRepository {
     user_id,
     class_id,
     content,
-    is_anonymous
+    is_anonymous,
   }: IUpdateCommentDTO): Promise<Comment> {
     const aComment = new Comment({ user_id, class_id, content, is_anonymous });
 
-    await connection<Comment>("comments").where('id', '=', id).update(aComment);
+    await connection<Comment>("comments").where("id", "=", id).update(aComment);
 
     return aComment;
   }
-  public async show({
-    id
-  }: IShowCommentDTO): Promise<Comment[]> {
-    const selectedComment = await connection<Comment>("comments").where('id', '=', id);
+  public async show({ id }: IShowCommentDTO): Promise<Comment[]> {
+    const selectedComment = await connection<Comment>("comments").where(
+      "id",
+      "=",
+      id
+    );
     return selectedComment;
-
   }
-  public async delete({
-    id
-  }: IDeleteCommentDTO): Promise<Comment[]> {
-    const deletedComment = await connection<Comment>("comments").where('id', '=', id);
-    await connection<Comment>("comments").where('id', '=', id).del();
+  public async delete({ id }: IDeleteCommentDTO): Promise<Comment[]> {
+    const deletedComment = await connection<Comment>("comments").where(
+      "id",
+      "=",
+      id
+    );
+    await connection<Comment>("comments").where("id", "=", id).del();
     return deletedComment;
   }
   public async index(): Promise<Comment[]> {
