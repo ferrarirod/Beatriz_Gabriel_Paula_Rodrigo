@@ -59,7 +59,7 @@ export function LeaderBoard(){
     return (
         <>
             <h1>Tabela de Classificação</h1>
-            <Table dataSource={users} columns={columns}/>
+            <Table dataSource={users?.sort(((a,b) =>  b.score - a.score))} columns={columns}/>
         </>
     );
 }
